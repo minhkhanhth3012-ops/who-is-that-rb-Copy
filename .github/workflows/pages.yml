@@ -44,12 +44,13 @@ jobs:
           const context = { window: {} };
           vm.runInNewContext(fs.readFileSync('question-pack.js', 'utf8'), context);
           const pack = context.window.RB_QUESTION_PACK;
-          if (!Array.isArray(pack) || pack.length !== 27) throw new Error('Expected 27 people in question-pack.js');
-          if (new Set(pack.map(x => x.person)).size !== 27) throw new Error('Roster names must be unique');
+          if (!Array.isArray(pack) || pack.length !== 28) throw new Error('Expected 28 people in question-pack.js');
+          if (new Set(pack.map(x => x.person)).size !== 28) throw new Error('Roster names must be unique');
           for (const q of pack) {
-            if (!q.person || !q.department || !q.crop || !q.original) throw new Error('Incomplete roster row: ' + q.id);
+            if (!q.person || !q.department || !q.question || !q.crop || !q.original || !q.role) throw new Error('Incomplete roster row: ' + q.id);
           }
-          console.log('Validated 27 unique people and their image paths.');
+          if (new Set(pack.map(x => x.crop)).size !== 28 || new Set(pack.map(x => x.original)).size !== 28) throw new Error('Photo paths must be unique');
+          console.log('Validated 28 unique people and their image paths.');
           NODE
       - name: Upload site artifact
         uses: actions/upload-pages-artifact@v3
