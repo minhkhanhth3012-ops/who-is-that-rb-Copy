@@ -246,6 +246,7 @@ label{display:block;margin:13px 0 7px;color:#b7a9bc;font-weight:700;font-size:9p
 </div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="./backend-config.js"></script>
+<script src="./question-pack.js"></script>
 <script>
 const QKEY='wit_rb_questions_v3',RKEY='wit_rb_results_v3',LIMIT=15,REVEAL=5;
 const $=id=>document.getElementById(id);
@@ -255,8 +256,8 @@ const db=(window.supabase&&backendConfig.supabaseUrl&&backendConfig.supabaseAnon
 const blank=()=>Array.from({length:29},(_,i)=>({id:i+1,crop:'',original:'',role:'',choices:['Đồng nghiệp A','Đồng nghiệp B','Đồng nghiệp C','Đồng nghiệp D'],correct:0}));
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function toast(message){const t=document.createElement('div');t.className='toast';t.textContent=message;document.body.appendChild(t);setTimeout(()=>t.remove(),2600)}
-function load(){try{let saved=JSON.parse(localStorage.getItem(QKEY));if(!Array.isArray(saved))saved=JSON.parse(localStorage.getItem("wit_rb_questions_v2")||"null");questions=Array.isArray(saved)&&saved.length===29?saved:blank()}catch(e){questions=blank()}}
-function save(){localStorage.setItem(QKEY,JSON.stringify(questions))}
+function load(){try{let saved=JSON.parse(localStorage.getItem(QKEY));if(!Array.isArray(saved))saved=JSON.parse(localStorage.getItem("wit_rb_questions_v2")||"null");const localVersion=Number(localStorage.getItem('wit_rb_pack_version')||0),remoteVersion=Number(window.RB_QUESTION_PACK_VERSION||0);if(Array.isArray(window.RB_QUESTION_PACK)&&window.RB_QUESTION_PACK.length===29&&remoteVersion>localVersion){questions=JSON.parse(JSON.stringify(window.RB_QUESTION_PACK));localStorage.setItem(QKEY,JSON.stringify(questions));localStorage.setItem('wit_rb_pack_version',String(remoteVersion))}else{questions=Array.isArray(saved)&&saved.length===29?saved:blank()}}catch(e){questions=Array.isArray(window.RB_QUESTION_PACK)?JSON.parse(JSON.stringify(window.RB_QUESTION_PACK)):blank()}}
+function save(){localStorage.setItem(QKEY,JSON.stringify(questions));localStorage.setItem('wit_rb_pack_version',String(window.RB_QUESTION_PACK_VERSION||0))}
 function readResults(){try{let all=JSON.parse(localStorage.getItem(RKEY));if(!Array.isArray(all)){all=JSON.parse(localStorage.getItem('wit_rb_results_v2')||'[]');localStorage.setItem(RKEY,JSON.stringify(all))}return Array.isArray(all)?all:[]}catch(e){return []}}
 function view(id){['join','game','finish','board','admin'].forEach(x=>$(x).classList.toggle('hide',x!==id));window.scrollTo({top:0,behavior:'smooth'})}
 function joinGame(){const n=$('playerName').value.trim();if(!n){$('playerName').focus();toast('Nhập nickname trước khi vào game nhé.');return}player=n;idx=0;logs=[];finished=false;$('playerLabel').textContent='PLAYER · '+player.toUpperCase();view('game');renderQuestion()}
