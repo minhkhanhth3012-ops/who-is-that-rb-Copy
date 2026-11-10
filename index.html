@@ -228,7 +228,7 @@ label{display:block;margin:13px 0 7px;color:#b7a9bc;font-weight:700;font-size:9p
     <div class="photo-stage"><div class="photo-label">CONFIDENTIAL · RB CASTING FILE</div><div class="photo-empty" id="cropBox"><b>?</b>THE IDENTITY IS HIDDEN</div></div>
     <div class="question-side">
       <div class="question-kicker" id="questionKicker">CASE FILE NO. 001</div>
-      <h2>Can you recognize<br>the person behind it?</h2>
+      <h2 id="questionTitle">Can you recognize<br>the person behind it?</h2>
       <p>Quan sát thật kỹ. Chọn một đáp án trước khi thời gian kết thúc.</p>
       <div class="answers" id="answers"></div>
       <div id="reveal" class="reveal hide"></div>
@@ -254,7 +254,7 @@ label{display:block;margin:13px 0 7px;color:#b7a9bc;font-weight:700;font-size:9p
 
 <section id="admin" class="view admin-wrap hide">
   <div class="admin-head"><div><div class="kicker">BEHIND THE SCENES</div><h2>Game content</h2></div><button class="admin-button" onclick="home()">← Back to game</button></div>
-  <div class="admin-note">Game có 27 câu theo đúng danh sách nhân vật bạn cung cấp. Tên, đơn vị, danh hiệu Idol và đường dẫn ảnh nằm trong question-pack.js. Bốn phương án trắc nghiệm được hệ thống tự chọn ngẫu nhiên từ roster 27 người. Để thay đổi nội dung công khai, chỉnh trực tiếp file trên GitHub rồi Commit changes.</div>
+  <div class="admin-note">Game có 27 câu theo đúng danh sách nhân vật bạn cung cấp. Tên, đơn vị, câu hỏi riêng cho từng nhân vật, danh hiệu Idol và đường dẫn ảnh nằm trong question-pack.js. Bốn phương án trắc nghiệm được hệ thống tự chọn ngẫu nhiên từ roster 27 người. Để thay đổi nội dung công khai, chỉnh trực tiếp file trên GitHub rồi Commit changes.</div>
   <div class="admin-toolbar">
     <a class="admin-button primary" href="https://github.com/minhkhanhth3012-ops/who-is-that-rb-Copy/edit/main/question-pack.js" target="_blank" rel="noopener">Edit 27-person roster</a>
     <a class="admin-button" href="https://github.com/minhkhanhth3012-ops/who-is-that-rb-Copy/tree/main/assets" target="_blank" rel="noopener">Upload 54 photos</a>
@@ -290,6 +290,7 @@ function renderQuestion(){
   if(idx>=TOTAL){finish();return}
   answered=false;
   const q=questions[idx];
+  $('questionTitle').innerHTML=esc(q.question||'Can you recognize\\nthe person behind it?').replace(/\\n/g,'<br>');
   $('progressCopy').textContent=String(idx+1).padStart(2,'0')+' / '+TOTAL;
   $('questionKicker').textContent='CASE FILE NO. '+String(idx+1).padStart(3,'0');
   $('timer').textContent='8.0';$('timerRing').style.background='conic-gradient(var(--gold) 100%,#ffffff16 0)';
