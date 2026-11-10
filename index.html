@@ -635,13 +635,13 @@ body:after{opacity:.055}
 <script src="./backend-config.js"></script>
 <script src="./question-pack.js"></script>
 <script>
-const TOTAL=28,MAX_SCORE=TOTAL*100,QKEY='wit_rb_questions_v4',RKEY='wit_rb_results_v4',LIMIT=10,REVEAL=5;
+const TOTAL=28,MAX_SCORE=TOTAL*100,QKEY='wit_rb_questions_v4',RKEY='wit_rb_results_v5',LIMIT=10,REVEAL=5;
 const $=id=>document.getElementById(id);
 let questions=[],idx=0,player='',logs=[],answered=false,start=0,timer=null,advance=null,finished=false;
 const backendConfig=window.RB_CONFIG||{};
 const db=(window.supabase&&backendConfig.supabaseUrl&&backendConfig.supabasePublishableKey)?window.supabase.createClient(backendConfig.supabaseUrl,backendConfig.supabasePublishableKey):null;
 
-const DEVICE_KEY='wit_rb_device_id_v1',PLAYED_KEY='wit_rb_played_v1';
+const DEVICE_KEY='wit_rb_device_id_v1',PLAYED_KEY='wit_rb_played_v2';
 let deviceId='',joining=false;
 function getDeviceId(){
   let id=localStorage.getItem(DEVICE_KEY);
