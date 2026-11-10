@@ -54,6 +54,19 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid 
 .art-caption small{font-size:8px;letter-spacing:.22em;color:#c5b6c9;line-height:1.8;text-align:right}
 .art-index{position:absolute;top:29px;left:29px;z-index:4;font-size:9px;letter-spacing:.25em;color:#f1d09a}
 .art-side{position:absolute;right:-24px;top:44%;writing-mode:vertical-rl;letter-spacing:.4em;font-size:8px;color:#b8a8ba}
+.live-board-card{max-width:520px;margin-top:20px;padding:14px 16px 11px;border:1px solid #d4b18155;background:linear-gradient(135deg,#21162bdb,#100b16ed);box-shadow:0 12px 35px #0005}
+.live-board-heading{display:flex;justify-content:space-between;align-items:center;gap:10px;color:var(--gold);font-size:8px;letter-spacing:.18em;font-weight:800}
+.live-board-heading span:last-child{font-size:7px;color:#a99bab;letter-spacing:.12em}
+.live-board-rows{margin-top:10px}
+.live-board-empty{font-size:9px;line-height:1.6;color:#a99bab;padding:8px 0}
+.live-rank-row{display:grid;grid-template-columns:25px minmax(0,1fr) auto;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid #ffffff13}
+.live-rank-row:last-child{border-bottom:0}
+.live-rank-no{font:italic 17px Georgia;color:var(--gold)}
+.live-rank-name{font-size:10px;color:#f2e9ef;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.live-rank-detail{display:block;font-size:7px;color:#948697;letter-spacing:.08em;margin-top:3px}
+.live-rank-score{font:normal 17px Georgia;color:var(--gold2);font-variant-numeric:tabular-nums}
+.live-board-link{background:transparent;border:0;box-shadow:none;color:#cbb9d0;font-size:8px;letter-spacing:.16em;padding:10px 0 0}
+.live-board-link:hover{color:var(--gold);transform:none}
 .start-panel{margin-top:33px;display:grid;grid-template-columns:minmax(0,280px) auto;gap:11px;max-width:520px}
 .name-input{height:55px;border:1px solid #d3b88a66;background:#ffffff08;padding:0 17px;color:#fff;font-size:13px;letter-spacing:.03em}
 .name-input::placeholder{color:#8d8094}
@@ -191,6 +204,11 @@ label{display:block;margin:13px 0 7px;color:#b7a9bc;font-weight:700;font-size:9p
       <input id="playerName" class="name-input" maxlength="32" placeholder="Tên bạn sẽ xuất hiện trên bảng vàng..." aria-label="Nickname">
       <button class="cta" onclick="joinGame()">Enter the game <span aria-hidden="true">↗</span></button>
     </div>
+    <div class="live-board-card">
+      <div class="live-board-heading"><span>🏆 TOP 3 · FAN CỨNG NHẤT RB</span><span id="liveBoardStatus">ĐANG TẢI...</span></div>
+      <div id="liveBoardRows" class="live-board-rows"><div class="live-board-empty">Đang kết nối bảng xếp hạng...</div></div>
+      <button class="live-board-link" onclick="showBoard()">XEM TOÀN BỘ BẢNG XẾP HẠNG ↗</button>
+    </div>
     <div class="note">Không cần MC · Không cần chờ lượt · Tự bắt đầu và chinh phục 29 câu hỏi</div>
   </div>
   <div class="hero-art" aria-hidden="true">
@@ -316,22 +334,50 @@ async function finish(){
     if(!readError&&data)$('boardRows').innerHTML=boardTable(data.map(x=>({name:x.player_name,score:x.score,correct:x.correct_count,time:Number(x.total_seconds),date:x.created_at})));
   }
 }
+let realtimeChannel=null,liveBoardPoll=null;
+function normalizeRemoteRows(data){return (data||[]).map(x=>({name:x.player_name,score:Number(x.score),correct:Number(x.correct_count),time:Number(x.total_seconds),date:x.created_at}))}
+function renderTopThree(all){
+  const list=all.slice().sort((a,b)=>b.score-a.score||a.time-b.time).slice(0,3);
+  if(!list.length)return '<div class="live-board-empty">Chưa có người chơi. Hãy là Fan Cứng đầu tiên! ✨</div>';
+  return list.map((x,i)=>'<div class="live-rank-row"><span class="live-rank-no">'+['01','02','03'][i]+'</span><span class="live-rank-name">'+esc(x.name)+'<small class="live-rank-detail">'+x.correct+'/29 CÂU ĐÚNG · '+x.time+'s</small></span><strong class="live-rank-score">'+x.score+'</strong></div>').join('');
+}
+async function refreshLiveBoard(){
+  if(!db){$('liveBoardStatus').textContent='CHƯA KẾT NỐI';$('liveBoardRows').innerHTML='<div class="live-board-empty">Bảng điểm chung chưa được kết nối.</div>';return}
+  const {data,error}=await db.from('rb_game_results').select('player_name,score,correct_count,total_seconds,created_at').order('score',{ascending:false}).order('total_seconds',{ascending:true}).limit(3);
+  if(error){$('liveBoardStatus').textContent='CHƯA SẴN SÀNG';$('liveBoardRows').innerHTML='<div class="live-board-empty">Chưa tải được bảng điểm. Cần khởi tạo bảng dữ liệu trong Supabase.</div>';return}
+  $('liveBoardRows').innerHTML=renderTopThree(normalizeRemoteRows(data));
+  $('liveBoardStatus').textContent='● LIVE LEADERBOARD';
+}
+async function refreshFullBoard(){
+  if(!db){
+    const all=readResults();$('standaloneBoard').innerHTML=boardTable(all)+'<p class="small-muted">Bảng xếp hạng chung chưa được kết nối.</p>';return;
+  }
+  const {data,error}=await db.from('rb_game_results').select('player_name,score,correct_count,total_seconds,created_at').order('score',{ascending:false}).order('total_seconds',{ascending:true}).limit(100);
+  if(error){$('standaloneBoard').innerHTML='<p class="small-muted">Chưa tải được bảng xếp hạng. Hãy kiểm tra bảng dữ liệu Supabase.</p>';return}
+  $('standaloneBoard').innerHTML=boardTable(normalizeRemoteRows(data));
+}
+function startLiveLeaderboard(){
+  refreshLiveBoard();
+  if(!db)return;
+  if(realtimeChannel){db.removeChannel(realtimeChannel);realtimeChannel=null}
+  realtimeChannel=db.channel('rb-live-leaderboard')
+    .on('postgres_changes',{event:'INSERT',schema:'public',table:'rb_game_results'},()=>{
+      refreshLiveBoard();
+      if(!$('board').classList.contains('hide'))refreshFullBoard();
+    })
+    .subscribe(status=>{
+      if(status==='SUBSCRIBED')$('liveBoardStatus').textContent='● LIVE LEADERBOARD';
+      else if(status==='CHANNEL_ERROR'||status==='TIMED_OUT')$('liveBoardStatus').textContent='AUTO REFRESH';
+    });
+  if(liveBoardPoll)clearInterval(liveBoardPoll);
+  // Fallback refresh keeps the display current if a WebSocket event is missed.
+  liveBoardPoll=setInterval(refreshLiveBoard,15000);
+}
 function boardTable(all){
   const list=all.slice().sort((a,b)=>b.score-a.score||a.time-b.time);
   return list.length?'<table><thead><tr><th>RANK</th><th>PLAYER</th><th>POINTS</th><th>CORRECT</th><th>TIME</th></tr></thead><tbody>'+list.map((x,i)=>'<tr><td>#'+(i+1)+'</td><td>'+esc(x.name)+'</td><td><b>'+x.score+'</b></td><td>'+x.correct+'/29</td><td>'+x.time+'s</td></tr>').join('')+'</tbody></table>':'<p class="small-muted">Chưa có lượt chơi nào.</p>';
 }
-async function showBoard(){
-  view('board');
-  if(db){
-    $('standaloneBoard').innerHTML='<p class="small-muted">Đang tải bảng xếp hạng chung…</p>';
-    const {data,error}=await db.from('rb_game_results').select('player_name,score,correct_count,total_seconds,created_at').order('score',{ascending:false}).order('total_seconds',{ascending:true}).limit(100);
-    if(error){$('standaloneBoard').innerHTML='<p class="small-muted">Chưa tải được bảng xếp hạng chung. Hãy thử lại sau.</p>';return}
-    $('standaloneBoard').innerHTML=boardTable((data||[]).map(x=>({name:x.player_name,score:x.score,correct:x.correct_count,time:Number(x.total_seconds),date:x.created_at})));
-    return;
-  }
-  let all=readResults();
-  $('standaloneBoard').innerHTML=boardTable(all)+'<p class="small-muted">Bảng xếp hạng hiện chỉ hiển thị kết quả trên thiết bị này. Chưa kết nối dữ liệu dùng chung.</p>';
-}
+async function showBoard(){view('board');await refreshFullBoard()}
 function playAgain(){$('playerName').value=player;joinGame()}
 function home(){clearInterval(timer);clearTimeout(advance);view('join')}
 function openAdmin(){renderAdmin();view('admin')}
@@ -379,6 +425,6 @@ function importJSON(e){
 }
 function resetQuestions(){if(confirm('Xóa nội dung 29 câu hỏi trong trình duyệt này?')){questions=blank();save();renderAdmin();toast('Đã tạo lại bộ câu hỏi trống.')}}
 $('playerName').addEventListener('keydown',e=>{if(e.key==='Enter')joinGame()});
-load();buildProgress();
+load();buildProgress();startLiveLeaderboard();
 </script>
 </body></html>
