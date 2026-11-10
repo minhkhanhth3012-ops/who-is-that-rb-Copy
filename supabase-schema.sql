@@ -1,5 +1,5 @@
 -- WHO IS THAT? — RB Men's Day 11/11
--- 28-question game: max 2,800 points, 28 correct answers, 224 seconds of answer time.
+-- 28-question game: max 2,800 points, 28 correct answers, 140 seconds of answer time.
 -- Run in Supabase SQL Editor as the project database owner.
 
 create table if not exists public.rb_game_results (
@@ -7,7 +7,7 @@ create table if not exists public.rb_game_results (
   player_name text not null check (char_length(trim(player_name)) between 1 and 32),
   score integer not null check (score between 0 and 2800),
   correct_count integer not null check (correct_count between 0 and 28),
-  total_seconds numeric(8,2) not null check (total_seconds between 0 and 224),
+  total_seconds numeric(8,2) not null check (total_seconds between 0 and 140),
   created_at timestamptz not null default now()
 );
 
@@ -17,7 +17,7 @@ alter table public.rb_game_results add constraint rb_game_results_score_check ch
 alter table public.rb_game_results drop constraint if exists rb_game_results_correct_count_check;
 alter table public.rb_game_results add constraint rb_game_results_correct_count_check check (correct_count between 0 and 28);
 alter table public.rb_game_results drop constraint if exists rb_game_results_total_seconds_check;
-alter table public.rb_game_results add constraint rb_game_results_total_seconds_check check (total_seconds between 0 and 224);
+alter table public.rb_game_results add constraint rb_game_results_total_seconds_check check (total_seconds between 0 and 140);
 
 alter table public.rb_game_results enable row level security;
 
@@ -35,7 +35,7 @@ with check (
   char_length(trim(player_name)) between 1 and 32
   and score between 0 and 2800
   and correct_count between 0 and 28
-  and total_seconds between 0 and 224
+  and total_seconds between 0 and 140
 );
 
 grant select, insert on public.rb_game_results to anon, authenticated;
