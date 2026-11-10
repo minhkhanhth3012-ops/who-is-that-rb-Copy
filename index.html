@@ -585,6 +585,21 @@ const $=id=>document.getElementById(id);
 let questions=[],idx=0,player='',logs=[],answered=false,start=0,timer=null,advance=null,finished=false;
 const backendConfig=window.RB_CONFIG||{};
 const db=(window.supabase&&backendConfig.supabaseUrl&&backendConfig.supabasePublishableKey)?window.supabase.createClient(backendConfig.supabaseUrl,backendConfig.supabasePublishableKey):null;
+
+const DEVICE_KEY='wit_rb_device_id_v1',PLAYED_KEY='wit_rb_played_v1';
+let deviceId='',joining=false;
+function getDeviceId(){
+  let id=localStorage.getItem(DEVICE_KEY);
+  if(!id){
+    id=(window.crypto&&typeof window.crypto.randomUUID==='function')
+      ?window.crypto.randomUUID()
+      :'rb-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2)+'-'+Math.random().toString(36).slice(2);
+    localStorage.setItem(DEVICE_KEY,id);
+  }
+  return id;
+}
+
+deviceId=getDeviceId();
 const blank=()=>Array.isArray(window.RB_QUESTION_PACK)?JSON.parse(JSON.stringify(window.RB_QUESTION_PACK)):[];
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function toast(message){const t=document.createElement('div');t.className='toast';t.textContent=message;document.body.appendChild(t);setTimeout(()=>t.remove(),2600)}
@@ -592,7 +607,41 @@ function load(){try{const saved=JSON.parse(localStorage.getItem(QKEY)||"null");c
 function save(){localStorage.setItem(QKEY,JSON.stringify(questions));localStorage.setItem('wit_rb_pack_version',String(window.RB_QUESTION_PACK_VERSION||0))}
 function readResults(){try{let all=JSON.parse(localStorage.getItem(RKEY));if(!Array.isArray(all)){all=JSON.parse(localStorage.getItem('wit_rb_results_v2')||'[]');localStorage.setItem(RKEY,JSON.stringify(all))}return Array.isArray(all)?all:[]}catch(e){return []}}
 function view(id){['join','game','finish','board'].forEach(x=>$(x).classList.toggle('hide',x!==id));window.scrollTo({top:0,behavior:'smooth'})}
-function joinGame(){const n=$('playerName').value.trim();if(!n){$('playerName').focus();toast('Nhập nickname trước khi vào game nhé.');return}player=n;idx=0;logs=[];finished=false;$('playerLabel').textContent='PLAYER · '+player.toUpperCase();view('game');renderQuestion()}
+async function joinGame(){
+  if(joining)return;
+  const n=$('playerName').value.trim();
+  if(!n){$('playerName').focus();toast('Nhập nickname trước khi vào game nhé.');return}
+  if(localStorage.getItem(PLAYED_KEY)==='1'){
+    toast('Thiết bị này đã sử dụng lượt chơi. Mỗi thiết bị chỉ có một lượt nhé!');
+    return;
+  }
+  joining=true;
+  const startButton=document.querySelector('.start-panel .cta');
+  if(startButton){startButton.disabled=true;startButton.textContent='CHECKING DEVICE…'}
+  try{
+    if(db){
+      const {data,error}=await db.from('rb_game_results').select('id').eq('device_id',deviceId).limit(1);
+      if(error){
+        toast('Chưa kiểm tra được thiết bị. Hãy chạy SQL mới trong supabase-schema.sql rồi thử lại.');
+        return;
+      }
+      if(data&&data.length){
+        localStorage.setItem(PLAYED_KEY,'1');
+        toast('Thiết bị này đã có một lượt chơi. Không thể chơi lại nhé!');
+        return;
+      }
+    }
+    localStorage.setItem(PLAYED_KEY,'1');
+    player=n;idx=0;logs=[];finished=false;
+    $('playerLabel').textContent='PLAYER · '+player.toUpperCase();
+    view('game');renderQuestion();
+  }catch(e){
+    toast('Không kiểm tra được lượt chơi. Hãy tải lại trang và thử lại.');
+  }finally{
+    joining=false;
+    if(startButton){startButton.disabled=false;startButton.innerHTML='Enter the game <span aria-hidden="true">↗</span>'}
+  }
+}
 function shuffleList(list){const a=list.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
 function fullDepartmentName(unit){const names={'Ban GDK':'Ban Giám đốc khối','TTAH':'Trung tâm Am hiểu khách hàng và Giải pháp phân khúc Khách hàng cá nhân','SPT&DVTTT':'Sản phẩm thẻ và Dịch vụ thanh toán thẻ','QLBH':'Quản lý bán hàng','Banca':'Banca'};return names[unit]||unit||'Chưa rõ đơn vị'}
 function makeChoices(q){const sameUnit=shuffleList(questions.filter(x=>x.id!==q.id&&x.department===q.department&&x.person)).slice(0,3);const selected=[q,...sameUnit];if(selected.length<4){const chosen=new Set(selected.map(x=>x.id));const mixed=shuffleList(questions.filter(x=>x.person&&!chosen.has(x.id))).slice(0,4-selected.length);selected.push(...mixed)}const shuffled=shuffleList(selected);const options=shuffled.map(x=>x.person+' - '+(x.department||'Chưa rõ đơn vị'));q._choices=options;q._correctIndex=shuffled.findIndex(x=>x.id===q.id);return options}
@@ -655,7 +704,7 @@ async function finish(){
   renderIdolGallery();
   view('finish');
   if(db){
-    const {error}=await db.from('rb_game_results').insert({player_name:player,score:points,correct_count:correct,total_seconds:time});
+    const {error}=await db.from('rb_game_results').insert({player_name:player,score:points,correct_count:correct,total_seconds:time,device_id:deviceId});
     if(error){toast('Chưa gửi được điểm lên bảng chung. Điểm vẫn lưu trên thiết bị này.');return}
     const {data,error:readError}=await db.from('rb_game_results').select('player_name,score,correct_count,total_seconds,created_at').order('score',{ascending:false}).order('total_seconds',{ascending:true}).limit(50);
     if(!readError&&data)$('boardRows').innerHTML=boardTable(data.map(x=>({name:x.player_name,score:x.score,correct:x.correct_count,time:Number(x.total_seconds),date:x.created_at})));
@@ -705,7 +754,7 @@ function boardTable(all){
   return list.length?'<table><thead><tr><th>RANK</th><th>PLAYER</th><th>POINTS</th><th>CORRECT</th><th>TIME</th></tr></thead><tbody>'+list.map((x,i)=>'<tr><td>#'+(i+1)+'</td><td>'+esc(x.name)+'</td><td><b>'+x.score+'</b></td><td>'+x.correct+'/'+TOTAL+'</td><td>'+x.time+'s</td></tr>').join('')+'</tbody></table>':'<p class="small-muted">Chưa có lượt chơi nào.</p>';
 }
 async function showBoard(){view('board');await refreshFullBoard()}
-function playAgain(){$('playerName').value=player;joinGame()}
+function playAgain(){toast('Mỗi thiết bị chỉ có một lượt chơi. Cảm ơn bạn đã tham gia!')}
 function home(){clearInterval(timer);clearTimeout(advance);view('join')}
 $('playerName').addEventListener('keydown',e=>{if(e.key==='Enter')joinGame()});
 load();buildProgress();startLiveLeaderboard();
