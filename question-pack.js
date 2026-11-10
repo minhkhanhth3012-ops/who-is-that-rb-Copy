@@ -2,7 +2,7 @@
 // question = Role only; slogan is revealed after the answer.
 // role = Idol title; slogan = signature line shown only on the reveal screen.
 // Photo paths use the q-code in the last column of the supplied table.
-window.RB_QUESTION_PACK_VERSION = 7;
+window.RB_QUESTION_PACK_VERSION = 8;
 window.RB_QUESTION_PACK = [
   {
     "id": 1,
@@ -192,7 +192,7 @@ window.RB_QUESTION_PACK = [
     "crop": "assets/q21_crop.png",
     "original": "assets/q21_original.png",
     "role": "Main rapper",
-    "slogan": "Anh vừa rap, loa đã báo tiền về."
+    "slogan": "Những lời đàm tiếu qua loa ting ting không thể cản bước Quangthieuvinh"
   },
   {
     "id": 20,
