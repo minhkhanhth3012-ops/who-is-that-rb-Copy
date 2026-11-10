@@ -8,10 +8,16 @@ create table if not exists public.rb_game_results (
   score integer not null check (score between 0 and 2800),
   correct_count integer not null check (correct_count between 0 and 28),
   total_seconds numeric(8,2) not null check (total_seconds between 0 and 280),
+  device_id text,
   created_at timestamptz not null default now()
 );
 
 -- Migrate an existing table from the earlier 27-question game.
+alter table public.rb_game_results add column if not exists device_id text;
+create unique index if not exists rb_game_results_device_id_uidx
+  on public.rb_game_results (device_id)
+  where device_id is not null;
+
 alter table public.rb_game_results drop constraint if exists rb_game_results_score_check;
 alter table public.rb_game_results add constraint rb_game_results_score_check check (score between 0 and 2800);
 alter table public.rb_game_results drop constraint if exists rb_game_results_correct_count_check;
@@ -36,6 +42,8 @@ with check (
   and score between 0 and 2800
   and correct_count between 0 and 28
   and total_seconds between 0 and 280
+  and device_id is not null
+  and char_length(device_id) between 8 and 100
 );
 
 grant select, insert on public.rb_game_results to anon, authenticated;
