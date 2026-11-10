@@ -266,7 +266,7 @@ label{display:block;margin:13px 0 7px;color:#b7a9bc;font-weight:700;font-size:9p
 <script src="./backend-config.js"></script>
 <script src="./question-pack.js"></script>
 <script>
-const QKEY='wit_rb_questions_v3',RKEY='wit_rb_results_v3',LIMIT=15,REVEAL=5;
+const QKEY='wit_rb_questions_v3',RKEY='wit_rb_results_v3',LIMIT=8,REVEAL=5;
 const $=id=>document.getElementById(id);
 let questions=[],idx=0,player='',logs=[],answered=false,start=0,timer=null,advance=null,finished=false;
 const backendConfig=window.RB_CONFIG||{};
@@ -310,7 +310,7 @@ function renderQuestion(){
 function choose(j){
   if(answered)return;answered=true;clearInterval(timer);
   const q=questions[idx],correct=j!==null&&Number(q.correct)===j,secs=Math.min(LIMIT,(Date.now()-start)/1000);
-  const pts=correct?(secs<=3?100:secs<=5?90:secs<=10?75:60):0;
+  const pts=correct?(secs<=2?100:secs<=4?90:secs<=6?75:60):0;
   logs.push({question:idx+1,choice:j,correct,seconds:+secs.toFixed(2),points:pts});
   [...$('answers').children].forEach((b,k)=>{b.disabled=true;if(k===Number(q.correct))b.classList.add('correct');else if(k===j)b.classList.add('wrong')});
   $('bigReveal').className='big-reveal';
