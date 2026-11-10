@@ -212,10 +212,14 @@ label{display:block;margin:13px 0 7px;color:#b7a9bc;font-weight:700;font-size:9p
 
 <footer class="footer"><span>WHO IS THAT? · A RETAIL BANKING ORIGINAL</span><span>MADE FOR THE PEOPLE OF RB · 2026</span></footer>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="./backend-config.js"></script>
 <script>
 const QKEY='wit_rb_questions_v3',RKEY='wit_rb_results_v3',LIMIT=15,REVEAL=5;
 const $=id=>document.getElementById(id);
 let questions=[],idx=0,player='',logs=[],answered=false,start=0,timer=null,advance=null,finished=false;
+const backendConfig=window.RB_CONFIG||{};
+const db=(window.supabase&&backendConfig.supabaseUrl&&backendConfig.supabaseAnonKey)?window.supabase.createClient(backendConfig.supabaseUrl,backendConfig.supabaseAnonKey):null;
 const blank=()=>Array.from({length:29},(_,i)=>({id:i+1,crop:'',original:'',choices:['Đồng nghiệp A','Đồng nghiệp B','Đồng nghiệp C','Đồng nghiệp D'],correct:0}));
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function toast(message){const t=document.createElement('div');t.className='toast';t.textContent=message;document.body.appendChild(t);setTimeout(()=>t.remove(),2600)}
@@ -261,7 +265,7 @@ function choose(j){
   reveal.innerHTML='<div class="reveal-head">'+(correct?'IDENTITY CONFIRMED · CORRECT':j===null?'TIME IS UP · THE REVEAL':'IDENTITY REVEALED · NOT QUITE')+'</div><div class="reveal-name">'+esc(q.choices[Number(q.correct)]||'Chưa thiết lập đáp án')+'</div>'+(q.original?'<img src="'+q.original+'" alt="Ảnh gốc">':'')+'<div class="reveal-foot"><span>'+(j===null?'Bạn đã hết 15 giây':'Thời gian trả lời: '+secs.toFixed(2)+' giây')+'</span><strong>+'+pts+' PTS</strong></div>';
   advance=setTimeout(()=>{idx++;renderQuestion()},REVEAL*1000);
 }
-function finish(){
+async function finish(){
   clearInterval(timer);if(finished)return;finished=true;
   const points=logs.reduce((s,a)=>s+a.points,0),correct=logs.filter(a=>a.correct).length,time=+logs.reduce((s,a)=>s+a.seconds,0).toFixed(2);
   let all=[];try{all=JSON.parse(localStorage.getItem(RKEY)||'[]')}catch(e){all=[]}
@@ -271,12 +275,29 @@ function finish(){
   $('mySummary').innerHTML='<div><b>'+correct+'/29</b><span>IDENTITIES GUESSED</span></div><div><b>'+time+'s</b><span>TIME IN THE GAME</span></div><div><b>'+Math.round(correct/29*100)+'%</b><span>ACCURACY</span></div>';
   $('boardRows').innerHTML=boardTable(all);
   view('finish');
+  if(db){
+    const {error}=await db.from('rb_game_results').insert({player_name:player,score:points,correct_count:correct,total_seconds:time});
+    if(error){toast('Chưa gửi được điểm lên bảng chung. Điểm vẫn lưu trên thiết bị này.');return}
+    const {data,error:readError}=await db.from('rb_game_results').select('player_name,score,correct_count,total_seconds,created_at').order('score',{ascending:false}).order('total_seconds',{ascending:true}).limit(50);
+    if(!readError&&data)$('boardRows').innerHTML=boardTable(data.map(x=>({name:x.player_name,score:x.score,correct:x.correct_count,time:Number(x.total_seconds),date:x.created_at})));
+  }
 }
 function boardTable(all){
   const list=all.slice().sort((a,b)=>b.score-a.score||a.time-b.time);
   return list.length?'<table><thead><tr><th>RANK</th><th>PLAYER</th><th>POINTS</th><th>CORRECT</th><th>TIME</th></tr></thead><tbody>'+list.map((x,i)=>'<tr><td>#'+(i+1)+'</td><td>'+esc(x.name)+'</td><td><b>'+x.score+'</b></td><td>'+x.correct+'/29</td><td>'+x.time+'s</td></tr>').join('')+'</tbody></table>':'<p class="small-muted">Chưa có lượt chơi nào.</p>';
 }
-function showBoard(){let all=[];try{all=JSON.parse(localStorage.getItem(RKEY)||'[]')}catch(e){}$('standaloneBoard').innerHTML=boardTable(all);view('board')}
+async function showBoard(){
+  view('board');
+  if(db){
+    $('standaloneBoard').innerHTML='<p class="small-muted">Đang tải bảng xếp hạng chung…</p>';
+    const {data,error}=await db.from('rb_game_results').select('player_name,score,correct_count,total_seconds,created_at').order('score',{ascending:false}).order('total_seconds',{ascending:true}).limit(100);
+    if(error){$('standaloneBoard').innerHTML='<p class="small-muted">Chưa tải được bảng xếp hạng chung. Hãy thử lại sau.</p>';return}
+    $('standaloneBoard').innerHTML=boardTable((data||[]).map(x=>({name:x.player_name,score:x.score,correct:x.correct_count,time:Number(x.total_seconds),date:x.created_at})));
+    return;
+  }
+  let all=[];try{all=JSON.parse(localStorage.getItem(RKEY)||'[]')}catch(e){}
+  $('standaloneBoard').innerHTML=boardTable(all)+'<p class="small-muted">Bảng xếp hạng hiện chỉ hiển thị kết quả trên thiết bị này. Chưa kết nối dữ liệu dùng chung.</p>';
+}
 function playAgain(){$('playerName').value=player;joinGame()}
 function home(){clearInterval(timer);clearTimeout(advance);view('join')}
 function openAdmin(){renderAdmin();view('admin')}
