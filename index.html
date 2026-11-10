@@ -549,6 +549,64 @@ body:after{opacity:.055}
   .reward-ticker-track{animation:none;transform:none}
   .reward-ticker-track span:nth-child(2){display:none}
 }
+
+/* Clickable idol cards + full-size original-photo lightbox */
+.idol-card{cursor:zoom-in}
+.idol-card:focus-visible{outline:2px solid #ffd17a;outline-offset:4px}
+.idol-card-tap{
+  margin-top:8px;color:#ffd17a;font-size:7px;font-weight:900;
+  letter-spacing:.15em;opacity:.9
+}
+.idol-lightbox{
+  position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;
+  padding:28px;background:#05030ded;backdrop-filter:blur(16px);
+}
+.idol-lightbox-panel{
+  width:min(1120px,96vw);max-height:92vh;min-height:0;
+  display:grid;grid-template-columns:minmax(0,1.35fr) minmax(260px,.65fr);
+  position:relative;overflow:hidden;border:1px solid #c18cf277;border-radius:18px;
+  background:radial-gradient(ellipse at 15% 25%,#783ca83d,transparent 48%),linear-gradient(135deg,#21132f,#090610 85%);
+  box-shadow:0 35px 100px #000c,0 0 55px #8e43c833;
+}
+.idol-lightbox-image-wrap{
+  min-width:0;min-height:360px;max-height:88vh;display:flex;align-items:center;justify-content:center;
+  padding:28px;background:radial-gradient(ellipse at 50% 48%,#9f5bd33d,transparent 55%),#090610;
+  border-right:1px solid #b77ce255;
+}
+.idol-lightbox-image-wrap img{
+  display:block;max-width:100%;max-height:82vh;width:auto;height:auto;object-fit:contain;
+  filter:drop-shadow(0 25px 35px #000c) drop-shadow(0 0 24px #d9a9ff33)
+}
+.idol-lightbox-copy{
+  padding:clamp(25px,4vw,50px);display:flex;flex-direction:column;justify-content:center;min-width:0
+}
+.idol-lightbox-copy h3{
+  font:italic clamp(32px,4vw,54px)/1 Georgia,serif;color:#fff0d8;margin:20px 0 12px
+}
+.idol-lightbox-role{font:italic 22px Georgia,serif;color:#e1b5ff}
+.idol-lightbox-slogan{
+  margin:22px 0 0;padding:17px;border:1px solid #ffc76b88;border-radius:12px;
+  background:linear-gradient(130deg,#542c70bb,#23132fef);
+  color:#fff3df;font:italic 16px/1.5 Georgia,serif
+}
+.idol-lightbox-hint{font-size:8px;line-height:1.6;color:#a99cad;letter-spacing:.16em;margin-top:25px}
+.idol-lightbox-close{
+  position:absolute;right:14px;top:14px;z-index:3;width:40px;height:40px;
+  border:1px solid #e3bdff77;border-radius:50%;background:#140b20e8;color:#fff;
+  font:normal 27px/1 Arial;display:grid;place-items:center
+}
+.idol-lightbox-close:hover{background:#713ca3}
+@media(max-width:760px){
+  .idol-lightbox{padding:12px}
+  .idol-lightbox-panel{width:100%;max-height:94vh;overflow:auto;grid-template-columns:1fr;grid-template-rows:minmax(220px,58vh) auto}
+  .idol-lightbox-image-wrap{min-height:220px;max-height:58vh;padding:18px;border-right:0;border-bottom:1px solid #b77ce255}
+  .idol-lightbox-image-wrap img{max-height:54vh;max-width:100%}
+  .idol-lightbox-copy{padding:20px 22px 25px}
+  .idol-lightbox-copy h3{font-size:34px;margin:12px 0}
+  .idol-lightbox-slogan{margin-top:13px;font-size:15px}
+  .idol-lightbox-hint{margin-top:15px}
+}
+
 </style>
 </head>
 <body>
@@ -569,7 +627,7 @@ body:after{opacity:.055}
       <p>Ngày thường, các anh là đồng nghiệp: chạy KPI, họp hành, deadline dí sát nút. Nhưng trong lòng chị em RB, mỗi anh đều là một <strong>idol</strong> chính hiệu: người thì “idol tận tâm”, người thì “idol nụ cười”, người thì “idol chốt deal không trượt phát nào”.</p>
       <p>Nhân ngày <strong>11/11</strong>, ngày của những người đàn ông “số 1”, các idol đã bị “cắt” ra từng mảnh: một ánh mắt, một nụ cười, một kiểu tóc huyền thoại…</p>
       <div class="preface-promises"><span>📸 Nhìn một góc ảnh, đoán đúng idol</span><span>⏱️ Càng nhanh, càng chuẩn, càng chứng tỏ bạn là fan ruột</span><span>🏆 Top 3 <strong>Fan Cứng Nhất RB</strong> sẽ được vinh danh!</div>
-      <div class="prize-announcement"><span>🏆</span><strong>TOP 3 FAN CỨNG RB SẼ ĐƯỢC THƯỞNG NÓNG</strong><em>“TIỀN TƯƠI THÓC THẬT”</em><span>💸</span></div>
+      <div class="prize-announcement"><span>🏆</span><strong>TOP 3 FAN CỨNG RB SẼ ĐƯỢC NHẬN GIẢI THƯỞNG</strong><em>“TIỀN TƯƠI THÓC THẬT”</em><span>💸</span></div>
       <div class="preface-cta">Nhập tên và bắt đầu thôi! 👇</div>
     </div>
     <div class="hero-meta"><span><b>28</b> MYSTERIES</span><span><b>10s</b> PER ROUND</span><span><b>01</b> CHANCE TO SHINE</span></div>
@@ -597,8 +655,8 @@ body:after{opacity:.055}
     <div class="game-status"><div class="progress-copy">YOUR JOURNEY<b id="progressCopy">01 / 28</b></div><div id="timerRing" class="timer-ring"><span id="timer">10.0</span></div></div>
   </div>
   <div class="progress-track" id="progressTrack"></div>
-  <div class="reward-ticker" role="note" aria-label="Top 3 Fan Cứng RB sẽ được thưởng nóng, tiền tươi thóc thật">
-    <div class="reward-ticker-track"><span>🏆 TOP 3 FAN CỨNG RB · THƯỞNG NÓNG “TIỀN TƯƠI THÓC THẬT” · CHƠI NHANH, ĐOÁN CHUẨN, LÊN BẢNG VÀNG ✦</span><span aria-hidden="true">🏆 TOP 3 FAN CỨNG RB · THƯỞNG NÓNG “TIỀN TƯƠI THÓC THẬT” · CHƠI NHANH, ĐOÁN CHUẨN, LÊN BẢNG VÀNG ✦</span></div>
+  <div class="reward-ticker" role="note" aria-label="Top 3 Fan Cứng RB sẽ nhận giải thưởng, tiền tươi thóc thật">
+    <div class="reward-ticker-track"><span>🏆 TOP 3 FAN CỨNG RB · NHẬN GIẢI THƯỞNG “TIỀN TƯƠI THÓC THẬT” · CHƠI NHANH, ĐOÁN CHUẨN, LÊN BẢNG VÀNG ✦</span><span aria-hidden="true">🏆 TOP 3 FAN CỨNG RB · NHẬN GIẢI THƯỞNG “TIỀN TƯƠI THÓC THẬT” · CHƠI NHANH, ĐOÁN CHUẨN, LÊN BẢNG VÀNG ✦</span></div>
   </div>
   <div class="play-card">
     <div class="photo-stage"><div class="photo-label">CONFIDENTIAL · RB CASTING FILE</div><div class="photo-empty" id="cropBox"><b>?</b>THE IDENTITY IS HIDDEN</div></div>
@@ -622,6 +680,19 @@ body:after{opacity:.055}
   <div class="board"><h3>Hall of Fame</h3><div id="boardRows"></div></div>
   <section class="idol-gallery"><div class="idol-gallery-head"><div class="finish-kicker">THE RB IDOL LINE-UP</div><h3>ALL 28 IDOLS</h3><p>Gương mặt và danh hiệu của các idol RB.</p></div><div class="idol-grid" id="idolGallery"></div></section>
 </section>
+<div id="idolLightbox" class="idol-lightbox hide" role="dialog" aria-modal="true" aria-label="Ảnh gốc của idol" onclick="if(event.target===this)closeIdolImage()">
+  <div class="idol-lightbox-panel">
+    <button class="idol-lightbox-close" type="button" aria-label="Đóng ảnh" onclick="closeIdolImage()">×</button>
+    <div class="idol-lightbox-image-wrap"><img id="idolLightboxImage" src="" alt=""></div>
+    <div class="idol-lightbox-copy">
+      <div class="finish-kicker">THE ORIGINAL · RB IDOL</div>
+      <h3 id="idolLightboxName"></h3>
+      <div id="idolLightboxRole" class="idol-lightbox-role"></div>
+      <p id="idolLightboxSlogan" class="idol-lightbox-slogan"></p>
+      <div class="idol-lightbox-hint">CLICK OUTSIDE OR PRESS ESC TO CLOSE</div>
+    </div>
+  </div>
+</div>
 
 <section id="board" class="view finish-wrap hide">
   <div class="finish-kicker">THE PEOPLE WHO STOOD OUT</div><h2>HALL OF<br><em style="color:var(--gold);font-weight:400">FAME.</em></h2>
@@ -688,6 +759,7 @@ async function joinGame(){
         return;
       }
     }
+    questions=shuffleList(questions);
     player=n;idx=0;logs=[];finished=false;
     $('playerLabel').textContent='PLAYER · '+player.toUpperCase();
     view('game');renderQuestion();
@@ -747,8 +819,28 @@ function choose(j){
   advance=setTimeout(()=>{idx++;renderQuestion()},REVEAL*1000);
 }
 function renderIdolGallery(){
-  $('idolGallery').innerHTML=questions.map(q=>'<article class="idol-card"><img loading="lazy" src="'+esc(q.original)+'" alt="'+esc(q.person)+'"><div class="idol-card-index">RB IDOL · '+String(q.id).padStart(2,'0')+'</div><div class="idol-card-copy"><div class="idol-card-name">'+esc(q.person)+'</div><div class="idol-card-role">'+esc(q.role||'')+'</div><div class="idol-card-slogan">'+esc(q.slogan||'')+'</div></div></article>').join('');
+  const lineup=questions.slice().sort((a,b)=>a.id-b.id);
+  $('idolGallery').innerHTML=lineup.map(q=>'<article class="idol-card" role="button" tabindex="0" aria-label="Xem ảnh gốc của '+esc(q.person)+'" onclick="openIdolImage('+q.id+')" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();openIdolImage('+q.id+') }"><img loading="lazy" src="'+esc(q.original)+'" alt="'+esc(q.person)+'"><div class="idol-card-index">RB IDOL · '+String(q.id).padStart(2,'0')+'</div><div class="idol-card-copy"><div class="idol-card-name">'+esc(q.person)+'</div><div class="idol-card-role">'+esc(q.role||'')+'</div><div class="idol-card-slogan">'+esc(q.slogan||'')+'</div><div class="idol-card-tap">↗ XEM ẢNH GỐC</div></div></article>').join('');
 }
+function openIdolImage(id){
+  const q=questions.find(x=>x.id===id);
+  if(!q||!q.original)return;
+  $('idolLightboxImage').src=q.original;
+  $('idolLightboxImage').alt='Ảnh gốc · '+q.person;
+  $('idolLightboxName').textContent=q.person||'';
+  $('idolLightboxRole').textContent=q.role||'';
+  $('idolLightboxSlogan').textContent=q.slogan||'';
+  $('idolLightbox').classList.remove('hide');
+  document.body.style.overflow='hidden';
+}
+function closeIdolImage(){
+  const box=$('idolLightbox');
+  if(!box)return;
+  box.classList.add('hide');
+  document.body.style.overflow='';
+  $('idolLightboxImage').src='';
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeIdolImage()});
 async function finish(){
   clearInterval(timer);if(finished)return;finished=true;
   const points=logs.reduce((s,a)=>s+a.points,0),correct=logs.filter(a=>a.correct).length,time=+logs.reduce((s,a)=>s+a.seconds,0).toFixed(2);
