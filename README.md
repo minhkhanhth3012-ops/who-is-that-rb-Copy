@@ -42,7 +42,7 @@ When the pack is updated, increment `RB_QUESTION_PACK_VERSION`. The browser will
 ## Shared leaderboard
 The website includes optional Supabase support:
 1. Create a Supabase project.
-2. Run `supabase-schema.sql` in Supabase SQL Editor.
+2. Run the complete `supabase-schema.sql` in Supabase SQL Editor. It creates the results table, RLS policies, and adds `public.rb_game_results` to the `supabase_realtime` publication.
 3. Copy the Project URL and public anon key from Project Settings → API into `backend-config.js`.
 4. Commit the file. GitHub Pages will deploy it automatically.
 
