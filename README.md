@@ -1,55 +1,49 @@
 # WHO IS THAT? — RB Men's Day 11/11
 
-A cinematic, self-paced guessing game for RB colleagues. There is no MC and no shared start time: each player enters a nickname and begins their own 29-question run.
+A cinematic, self-paced guessing game for 27 RB colleagues. There is no MC and no shared start time: each player enters a nickname and begins their own 27-question run.
 
 ## Player experience
 - Intro preface: **RB MEN'S DAY 11/11 — IDOL RB LÀ AI?**
-- 29 cropped-photo clues, one per question
-- 15 seconds to answer each question
-- After an answer or timeout, a large cinematic reveal displays the corresponding original photo, the correct name, and the person's assigned Idol role
+- 27 cropped-photo clues, one for each person in the roster
+- 8 seconds to answer each question
+- After an answer or timeout, a large cinematic reveal displays the corresponding original photo, correct name, unit, and optional Idol role
 - Reveal remains for five seconds, then the next clue starts automatically
-- Speed-based scoring and a final results screen
+- Speed-based scoring: 100 / 90 / 75 / 60 for correct answers according to response time
+- Scores are submitted to Supabase and the public Top 3 board updates via Realtime
 
-## The 58-photo set
-Each character requires two separate images:
-- `assets/q01_crop.jpg` — the cropped clue
-- `assets/q01_original.jpg` — the full/original photo shown after the answer
+## The 27-person roster
+The order in `question-pack.js` follows the supplied STT list exactly. Each entry stores:
+- `person`: correct identity for that question
+- `department`: unit / business group
+- `role`: optional Idol role; may remain blank
+- `crop`: cropped clue path
+- `original`: original photo path
 
-Continue with `q02` through `q29` (58 images total). Keep the filenames exactly as shown. The published question data and photo assets are loaded from the site, so every visitor receives the same questions and images.
+The game automatically builds four options per question: the correct person's name plus three randomly selected distractors from the other 26 people. The choices are shuffled each time a player starts a question.
 
-The easiest handoff is one ZIP containing all 58 images, named using the pattern above. Upload the ZIP to the project maintainer; the images will be added to `assets/` and the shared question pack will be updated.
+## The 54-photo set
+Upload 54 image files directly into the `assets/` folder:
+- `assets/q01_crop.jpg` through `assets/q27_crop.jpg`
+- `assets/q01_original.jpg` through `assets/q27_original.jpg`
 
-## Idol role / persona
-Every question has an `role` field. Example values:
-- Idol tận tâm
-- Idol nụ cười
-- Idol chốt deal
-- Idol năng lượng
-- Idol deadline warrior
+The crop is the clue; the original is shown in the large reveal after the player answers or the timer expires. Keep the filenames exactly as shown, or update the paths in `question-pack.js` if using different extensions.
 
-The role appears with the full photo reveal. The admin editor also has a per-person field for assigning the role.
+Everyone visiting the website loads the same published images and roster from GitHub Pages. There is no need to upload images through the Admin screen.
 
-## Question data
-`question-pack.js` is the published 29-question pack. For each person, it stores:
-- `crop`: path to the cropped photo
-- `original`: path to the original photo
-- `choices`: the four name options
-- `correct`: index of the correct option (0–3)
-- `role`: the person's Idol role
+## Editing content yourself
+- Intro text, subtitles, labels, UI copy, timer and design: `index.html`
+- Names, units, photo paths and Idol roles: `question-pack.js`
+- Photos: upload them to `assets/`
 
-When the pack is updated, increment `RB_QUESTION_PACK_VERSION`. The browser will then refresh its locally cached pack on the next visit.
+After editing `question-pack.js`, increment `RB_QUESTION_PACK_VERSION` so browsers refresh their cached roster. GitHub Actions deploys automatically after each commit.
 
 ## Shared leaderboard
-The website includes optional Supabase support:
-1. Create a Supabase project.
-2. Run the complete `supabase-schema.sql` in Supabase SQL Editor. It creates the results table, RLS policies, and adds `public.rb_game_results` to the `supabase_realtime` publication.
-3. Copy the Project URL and public anon key from Project Settings → API into `backend-config.js`.
-4. Commit the file. GitHub Pages will deploy it automatically.
+The site uses the configured Supabase project. The database stores results; the homepage shows the public Top 3, and Hall of Fame shows the full leaderboard. Supabase Realtime listens for new result inserts, with a 15-second polling fallback.
 
-Until Supabase is configured, scores remain local to the browser. Supabase client-submitted scores are suitable for a casual office game, not tamper-proof prize adjudication.
+The database schema and migration are in `supabase-schema.sql`. The game now has a maximum of 2,700 points, 27 correct answers, and 216 answer-seconds. The earlier 29-question database limits are looser and do not block the new 27-question results; run the updated schema only if you also want to tighten the database constraints to exactly 27 questions.
 
-## Public-photo note
-This repository and GitHub Pages site are public. Any uploaded colleague photos will be accessible to anyone who has or discovers the website URL. Obtain the colleagues' agreement before publishing their photos.
+## Privacy
+This repository and GitHub Pages site are public. Any published colleague photos are accessible to visitors to the website. Obtain colleagues' agreement before publishing their photos.
 
 ## Deployment
 GitHub Actions validates the JavaScript and deploys the site to GitHub Pages whenever changes are pushed to `main`.
