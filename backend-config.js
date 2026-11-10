@@ -1,6 +1,6 @@
-// Public frontend configuration. Supabase anon keys are designed for browser use.
-// Fill these after creating the Supabase project and applying supabase-schema.sql.
+// Public browser configuration. Use the Supabase PUBLISHABLE key (sb_publishable_...).
+// Never put a Supabase secret/service_role key in this file.
 window.RB_CONFIG = {
   supabaseUrl: "",
-  supabaseAnonKey: ""
+  supabasePublishableKey: ""
 };
