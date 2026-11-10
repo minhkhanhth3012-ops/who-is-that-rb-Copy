@@ -219,7 +219,7 @@ label{display:block;margin:13px 0 7px;color:#b7a9bc;font-weight:700;font-size:9p
 <section id="game" class="view game-wrap hide">
   <div class="game-top">
     <div><div class="game-title">WHO IS <em>THAT?</em></div><div class="player-tag" id="playerLabel"></div></div>
-    <div class="game-status"><div class="progress-copy">YOUR JOURNEY<b id="progressCopy">01 / 28</b></div><div id="timerRing" class="timer-ring"><span id="timer">5.0</span></div></div>
+    <div class="game-status"><div class="progress-copy">YOUR JOURNEY<b id="progressCopy">01 / 28</b></div><div id="timerRing" class="timer-ring"><span id="timer">10.0</span></div></div>
   </div>
   <div class="progress-track" id="progressTrack"></div>
   <div class="play-card">
@@ -227,7 +227,7 @@ label{display:block;margin:13px 0 7px;color:#b7a9bc;font-weight:700;font-size:9p
     <div class="question-side">
       <div class="question-kicker" id="questionKicker">CASE FILE NO. 001</div>
       <h2 id="questionTitle">Can you recognize<br>the person behind it?</h2>
-      <p>Quan sát thật kỹ. Chọn một đáp án trong 5 giây.</p>
+      <p>Quan sát thật kỹ. Chọn một đáp án trong 10 giây.</p>
       <div class="answers" id="answers"></div>
       <div id="reveal" class="reveal hide"></div>
     </div>
@@ -257,7 +257,7 @@ label{display:block;margin:13px 0 7px;color:#b7a9bc;font-weight:700;font-size:9p
 <script src="./backend-config.js"></script>
 <script src="./question-pack.js"></script>
 <script>
-const TOTAL=28,MAX_SCORE=TOTAL*100,QKEY='wit_rb_questions_v4',RKEY='wit_rb_results_v4',LIMIT=5,REVEAL=5;
+const TOTAL=28,MAX_SCORE=TOTAL*100,QKEY='wit_rb_questions_v4',RKEY='wit_rb_results_v4',LIMIT=10,REVEAL=5;
 const $=id=>document.getElementById(id);
 let questions=[],idx=0,player='',logs=[],answered=false,start=0,timer=null,advance=null,finished=false;
 const backendConfig=window.RB_CONFIG||{};
@@ -271,8 +271,8 @@ function readResults(){try{let all=JSON.parse(localStorage.getItem(RKEY));if(!Ar
 function view(id){['join','game','finish','board'].forEach(x=>$(x).classList.toggle('hide',x!==id));window.scrollTo({top:0,behavior:'smooth'})}
 function joinGame(){const n=$('playerName').value.trim();if(!n){$('playerName').focus();toast('Nhập nickname trước khi vào game nhé.');return}player=n;idx=0;logs=[];finished=false;$('playerLabel').textContent='PLAYER · '+player.toUpperCase();view('game');renderQuestion()}
 function shuffleList(list){const a=list.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
-function answerUnit(unit){return unit==='Ban GDK'?'Ban Giám đốc khối':unit||'Chưa rõ đơn vị'}
-function makeChoices(q){const sameUnit=questions.filter(x=>x.department===q.department&&x.person);const distractors=shuffleList(sameUnit.filter(x=>x.id!==q.id)).slice(0,3);const selected=shuffleList([q,...distractors]);const options=selected.map(x=>x.person+' - '+answerUnit(x.department));q._choices=options;q._correctIndex=selected.findIndex(x=>x.id===q.id);return options}
+function fullDepartmentName(unit){const names={'Ban GDK':'Ban Giám đốc khối','TTAH':'Trung tâm Am hiểu khách hàng và Giải pháp phân khúc KHCN','SPT&DVTTT':'Sản phẩm thẻ và Dịch vụ thanh toán thẻ','QLBH':'Quản lý bán hàng','Banca':'Banca'};return names[unit]||unit||'Chưa rõ đơn vị'}
+function makeChoices(q){const sameUnit=shuffleList(questions.filter(x=>x.id!==q.id&&x.department===q.department&&x.person)).slice(0,3);const selected=[q,...sameUnit];if(selected.length<4){const chosen=new Set(selected.map(x=>x.id));const mixed=shuffleList(questions.filter(x=>x.person&&!chosen.has(x.id))).slice(0,4-selected.length);selected.push(...mixed)}const shuffled=shuffleList(selected);const options=shuffled.map(x=>x.person+' - '+(x.department||'Chưa rõ đơn vị'));q._choices=options;q._correctIndex=shuffled.findIndex(x=>x.id===q.id);return options}
 function buildProgress(){ $('progressTrack').innerHTML=Array.from({length:TOTAL},(_,i)=>'<i id="seg'+i+'"></i>').join('') }
 function renderQuestion(){
   clearInterval(timer);clearTimeout(advance);
@@ -282,7 +282,7 @@ function renderQuestion(){
   $('questionTitle').innerHTML=esc(q.question||'Can you recognize the idol?').replace(/\\n/g,'<br>');
   $('progressCopy').textContent=String(idx+1).padStart(2,'0')+' / '+TOTAL;
   $('questionKicker').textContent='CASE FILE NO. '+String(idx+1).padStart(3,'0');
-  $('timer').textContent='5.0';$('timerRing').style.background='conic-gradient(var(--gold) 100%,#ffffff16 0)';
+  $('timer').textContent='10.0';$('timerRing').style.background='conic-gradient(var(--gold) 100%,#ffffff16 0)';
   $('timerRing').classList.remove('urgent');
   for(let i=0;i<TOTAL;i++)$('seg'+i).classList.toggle('done',i<idx);
   $('reveal').className='reveal hide';$('reveal').innerHTML='';$('bigReveal').className='big-reveal hide';$('bigReveal').innerHTML='';
@@ -310,11 +310,11 @@ function renderQuestion(){
 function choose(j){
   if(answered)return;answered=true;clearInterval(timer);
   const q=questions[idx],correct=j!==null&&q._correctIndex===j,secs=Math.min(LIMIT,(Date.now()-start)/1000);
-  const pts=correct?(secs<=1.25?100:secs<=2.5?90:secs<=3.75?75:60):0;
+  const pts=correct?(secs<=2.5?100:secs<=5?90:secs<=7.5?75:60):0;
   logs.push({question:idx+1,choice:j,correct,seconds:+secs.toFixed(2),points:pts});
   [...$('answers').children].forEach((b,k)=>{b.disabled=true;if(k===q._correctIndex)b.classList.add('correct');else if(k===j)b.classList.add('wrong')});
   $('bigReveal').className='big-reveal';
-  $('bigReveal').innerHTML='<div class="big-reveal-photo">'+(q.original?'<img src="'+q.original+'" alt="Ảnh gốc">':'<div class="photo-empty"><b>★</b>ẢNH GỐC SẼ ĐƯỢC CẬP NHẬT</div>')+'</div><div class="big-reveal-copy"><div class="reveal-head">'+(correct?'✓ FAN RUỘT ĐÃ NHẬN RA IDOL':j===null?'HẾT GIỜ · BẬT MÍ DANH TÍNH':'BẬT MÍ DANH TÍNH · HẸN CÂU SAU')+'</div><div class="reveal-person">'+esc(q.person||'Chưa thiết lập tên nhân vật')+'</div><div class="role-plaque"><span>THE IDOL ROLE</span><strong>'+esc(q.role||'Chưa phân vai idol')+'</strong></div><div class="reveal-department">'+(q.department?'BAN / ĐƠN VỊ · '+esc(q.department):'')+'</div><div class="reveal-divider"></div><div class="reveal-foot"><span>'+(j===null?'Bạn đã hết 5 giây':'Bạn trả lời trong '+secs.toFixed(2)+' giây')+'</span><strong>+'+pts+' PTS</strong></div><div class="next-count">NEXT REVEAL IN 5 SECONDS</div></div>';
+  $('bigReveal').innerHTML='<div class="big-reveal-photo">'+(q.original?'<img src="'+q.original+'" alt="Ảnh gốc">':'<div class="photo-empty"><b>★</b>ẢNH GỐC SẼ ĐƯỢC CẬP NHẬT</div>')+'</div><div class="big-reveal-copy"><div class="reveal-head">'+(correct?'✓ FAN RUỘT ĐÃ NHẬN RA IDOL':j===null?'HẾT GIỜ · BẬT MÍ DANH TÍNH':'BẬT MÍ DANH TÍNH · HẸN CÂU SAU')+'</div><div class="reveal-person">'+esc(q.person||'Chưa thiết lập tên nhân vật')+'</div><div class="role-plaque"><span>THE IDOL ROLE</span><strong>'+esc(q.role||'Chưa phân vai idol')+'</strong></div><div class="reveal-department">'+(q.department?'BAN / ĐƠN VỊ · '+esc(fullDepartmentName(q.department)):'')+'</div><div class="reveal-divider"></div><div class="reveal-foot"><span>'+(j===null?'Bạn đã hết 10 giây':'Bạn trả lời trong '+secs.toFixed(2)+' giây')+'</span><strong>+'+pts+' PTS</strong></div><div class="next-count">NEXT REVEAL IN 5 SECONDS</div></div>';
   advance=setTimeout(()=>{idx++;renderQuestion()},REVEAL*1000);
 }
 function renderIdolGallery(){
