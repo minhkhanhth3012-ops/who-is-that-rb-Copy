@@ -253,11 +253,14 @@ label{display:block;margin:13px 0 7px;color:#b7a9bc;font-weight:700;font-size:9p
 </section>
 
 <section id="admin" class="view admin-wrap hide">
-  <div class="admin-head"><div><div class="kicker">BEHIND THE SCENES</div><h2>Control room</h2></div><button class="admin-button" onclick="home()">← Back to game</button></div>
-  <div class="admin-note">Danh sách 27 nhân vật và đơn vị đã được khai báo trong question-pack.js. Bạn quản lý nội dung công khai bằng cách sửa file question-pack.js và upload ảnh vào assets trên GitHub. Các phương án trắc nghiệm sẽ tự động lấy ngẫu nhiên từ danh sách 27 người; không cần Admin nhập từng phương án.</div>
-  <div class="admin-toolbar"><button class="admin-button" onclick="exportJSON()">↓ Export question pack</button><label class="admin-button">↑ Import question pack <input type="file" accept=".json" hidden onchange="importJSON(event)"></label></div>
+  <div class="admin-head"><div><div class="kicker">BEHIND THE SCENES</div><h2>Game content</h2></div><button class="admin-button" onclick="home()">← Back to game</button></div>
+  <div class="admin-note">Game có 27 câu theo đúng danh sách nhân vật bạn cung cấp. Tên, đơn vị, danh hiệu Idol và đường dẫn ảnh nằm trong question-pack.js. Bốn phương án trắc nghiệm được hệ thống tự chọn ngẫu nhiên từ roster 27 người. Để thay đổi nội dung công khai, chỉnh trực tiếp file trên GitHub rồi Commit changes.</div>
+  <div class="admin-toolbar">
+    <a class="admin-button primary" href="https://github.com/minhkhanhth3012-ops/who-is-that-rb-Copy/edit/main/question-pack.js" target="_blank" rel="noopener">Edit 27-person roster</a>
+    <a class="admin-button" href="https://github.com/minhkhanhth3012-ops/who-is-that-rb-Copy/tree/main/assets" target="_blank" rel="noopener">Upload 54 photos</a>
+    <a class="admin-button" href="https://github.com/minhkhanhth3012-ops/who-is-that-rb-Copy/edit/main/index.html" target="_blank" rel="noopener">Edit website text</a>
+  </div>
   <div id="adminQuestions"></div>
-  <div class="admin-toolbar"><button class="admin-button primary" onclick="saveAdmin()">Save roles locally</button><button class="admin-button" onclick="resetQuestions()">Reset questions</button></div>
 </section>
 
 <footer class="footer"><span>WHO IS THAT? · A RETAIL BANKING ORIGINAL</span><span>MADE FOR THE PEOPLE OF RB · 2026</span></footer>
@@ -321,7 +324,7 @@ function choose(j){
   logs.push({question:idx+1,choice:j,correct,seconds:+secs.toFixed(2),points:pts});
   [...$('answers').children].forEach((b,k)=>{b.disabled=true;if(k===q._correctIndex)b.classList.add('correct');else if(k===j)b.classList.add('wrong')});
   $('bigReveal').className='big-reveal';
-  $('bigReveal').innerHTML='<div class="big-reveal-photo">'+(q.original?'<img src="'+q.original+'" alt="Ảnh gốc">':'<div class="photo-empty"><b>★</b>ẢNH GỐC SẼ ĐƯỢC CẬP NHẬT</div>')+'</div><div class="big-reveal-copy"><div class="reveal-head">'+(correct?'✓ FAN RUỘT ĐÃ NHẬN RA IDOL':j===null?'HẾT GIỜ · BẬT MÍ DANH TÍNH':'BẬT MÍ DANH TÍNH · HẸN CÂU SAU')+'</div><div class="reveal-person">'+esc(q.person||'Chưa thiết lập tên nhân vật')+'</div><div class="role-plaque"><span>THE IDOL ROLE</span><strong>'+esc(q.role||'Chưa phân vai idol')+'</strong></div><div class="reveal-divider"></div><div class="reveal-foot"><span>'+(j===null?'Bạn đã hết 8 giây':'Bạn trả lời trong '+secs.toFixed(2)+' giây')+'</span><strong>+'+pts+' PTS</strong></div><div class="next-count">NEXT REVEAL IN 5 SECONDS</div></div>';
+  $('bigReveal').innerHTML='<div class="big-reveal-photo">'+(q.original?'<img src="'+q.original+'" alt="Ảnh gốc">':'<div class="photo-empty"><b>★</b>ẢNH GỐC SẼ ĐƯỢC CẬP NHẬT</div>')+'</div><div class="big-reveal-copy"><div class="reveal-head">'+(correct?'✓ FAN RUỘT ĐÃ NHẬN RA IDOL':j===null?'HẾT GIỜ · BẬT MÍ DANH TÍNH':'BẬT MÍ DANH TÍNH · HẸN CÂU SAU')+'</div><div class="reveal-person">'+esc(q.person||'Chưa thiết lập tên nhân vật')+'</div><div class="role-plaque"><span>THE IDOL ROLE</span><strong>'+esc(q.role||'Chưa phân vai idol')+'</strong></div><div class="reveal-department">'+(q.department?'BAN / ĐƠN VỊ · '+esc(q.department):'')+'</div><div class="reveal-divider"></div><div class="reveal-foot"><span>'+(j===null?'Bạn đã hết 8 giây':'Bạn trả lời trong '+secs.toFixed(2)+' giây')+'</span><strong>+'+pts+' PTS</strong></div><div class="next-count">NEXT REVEAL IN 5 SECONDS</div></div>';
   advance=setTimeout(()=>{idx++;renderQuestion()},REVEAL*1000);
 }
 async function finish(){
@@ -389,7 +392,7 @@ function playAgain(){$('playerName').value=player;joinGame()}
 function home(){clearInterval(timer);clearTimeout(advance);view('join')}
 function openAdmin(){renderAdmin();view('admin')}
 function renderAdmin(){
-  $('adminQuestions').innerHTML=questions.map(q=>'<div class="qrow"><b>CASE FILE · '+String(q.id).padStart(2,'0')+'</b><div class="small-muted">'+esc(q.person)+' · '+esc(q.department)+'</div></div>').join('');
+  $('adminQuestions').innerHTML='<div class="qrow"><b>ROSTER · '+questions.length+' PEOPLE</b>'+questions.map(q=>'<div class="live-rank-row"><span class="live-rank-no">'+String(q.id).padStart(2,'0')+'</span><span class="live-rank-name">'+esc(q.person)+'<small class="live-rank-detail">'+esc(q.department||'')+'</small></span><span class="small-muted">'+(q.role?esc(q.role):'CHƯA PHÂN VAI')+'</span></div>').join('')+'</div>';
 }
 $('playerName').addEventListener('keydown',e=>{if(e.key==='Enter')joinGame()});
 load();buildProgress();startLiveLeaderboard();
