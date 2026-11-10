@@ -4,7 +4,7 @@ A cinematic, self-paced guessing game for 28 RB colleagues. There is no MC and n
 
 ## Player experience
 - Intro preface: **RB MEN'S DAY 11/11 — IDOL RB LÀ AI?**
-- 28 cropped-photo clues, one for each person in the roster
+- 28 cropped-photo clues, one for each person in the roster; the prompt shows the Idol Role only
 - 10 seconds to answer each question
 - After an answer or timeout, a large cinematic reveal displays the corresponding original photo, correct name, unit, and Idol role/tagline
 - Reveal remains for five seconds, then the next clue starts automatically
@@ -15,8 +15,9 @@ A cinematic, self-paced guessing game for 28 RB colleagues. There is no MC and n
 The order in `question-pack.js` follows the latest table you supplied. Each entry stores:
 - `person`: correct identity for that question
 - `department`: unit / business group
-- `question`: the full hint text from column 3, shown as the question prompt
-- `role`: Idol title, combined with the person's name in each answer choice and shown on the reveal screen
+- `question`: the question prompt, set to the Idol Role only
+- `role`: Idol title, shown in the prompt and reveal screen
+- `slogan`: signature line shown only after the answer, highlighted on the reveal screen
 - `crop` and `original`: photo paths assigned using the q-code in the last column of your table
 
 The game builds four options per question in the format `Person name - abbreviated department`: it prioritizes people from the same department, and mixes in other departments only when that department has fewer than four people. The reveal screen displays the full department name. The choices are shuffled each time a player starts a question.
@@ -53,3 +54,7 @@ The public Control Room has been removed. After completing all questions, each p
 
 
 Department labels: TTAH = Trung tâm Am hiểu khách hàng và Giải pháp phân khúc KHCN; SPT&DVTTT = Sản phẩm thẻ và Dịch vụ thanh toán thẻ; QLBH = Quản lý bán hàng; Banca = Banca; Ban GDK = Ban Giám đốc khối. Answer options use short codes; the reveal uses full names. The answer timer is 10 seconds, with five-second reveal.
+
+
+## One attempt per browser/device
+The game stores a browser-specific ID and marks the browser as having used its one attempt as soon as the game starts. The result row also stores that ID, with a unique database index to reject a second submission from the same browser ID. This is a one-attempt-per-browser-profile control, not a hardware-level device lock: clearing browser data or using a different browser/incognito profile can bypass it.
