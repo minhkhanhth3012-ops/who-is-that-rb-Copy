@@ -36,6 +36,21 @@ jobs:
           Path('/tmp/site.js').write_text('\n'.join(scripts), encoding='utf-8')
           PY
           node --check /tmp/site.js
+          node --check question-pack.js
+          node --check backend-config.js
+          node - <<'NODE'
+          const fs = require('fs');
+          const vm = require('vm');
+          const context = { window: {} };
+          vm.runInNewContext(fs.readFileSync('question-pack.js', 'utf8'), context);
+          const pack = context.window.RB_QUESTION_PACK;
+          if (!Array.isArray(pack) || pack.length !== 27) throw new Error('Expected 27 people in question-pack.js');
+          if (new Set(pack.map(x => x.person)).size !== 27) throw new Error('Roster names must be unique');
+          for (const q of pack) {
+            if (!q.person || !q.department || !q.crop || !q.original) throw new Error('Incomplete roster row: ' + q.id);
+          }
+          console.log('Validated 27 unique people and their image paths.');
+          NODE
       - name: Upload site artifact
         uses: actions/upload-pages-artifact@v3
         with:
