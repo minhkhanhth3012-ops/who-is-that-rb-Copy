@@ -283,7 +283,7 @@ function readResults(){try{let all=JSON.parse(localStorage.getItem(RKEY));if(!Ar
 function view(id){['join','game','finish','board','admin'].forEach(x=>$(x).classList.toggle('hide',x!==id));window.scrollTo({top:0,behavior:'smooth'})}
 function joinGame(){const n=$('playerName').value.trim();if(!n){$('playerName').focus();toast('Nhập nickname trước khi vào game nhé.');return}player=n;idx=0;logs=[];finished=false;$('playerLabel').textContent='PLAYER · '+player.toUpperCase();view('game');renderQuestion()}
 function shuffleList(list){const a=list.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
-function makeChoices(q){const others=questions.filter(x=>x.id!==q.id&&x.person);const selected=shuffleList([q,...shuffleList(others).slice(0,3)]);const options=shuffleList(selected).map(x=>x.person+' - '+(x.role||'Chưa có chức danh'));q._choices=options;q._correctIndex=selected.findIndex(x=>x.id===q.id);return options}
+function makeChoices(q){const others=questions.filter(x=>x.id!==q.id&&x.person);const selected=shuffleList([q,...shuffleList(others).slice(0,3)]);const options=selected.map(x=>x.person+' - '+(x.role||'Chưa có chức danh'));q._choices=options;q._correctIndex=selected.findIndex(x=>x.id===q.id);return options}
 function buildProgress(){ $('progressTrack').innerHTML=Array.from({length:TOTAL},(_,i)=>'<i id="seg'+i+'"></i>').join('') }
 function renderQuestion(){
   clearInterval(timer);clearTimeout(advance);
