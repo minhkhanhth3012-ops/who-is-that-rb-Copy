@@ -25,8 +25,6 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid 
 .mark-copy span{display:block;font-size:9px;color:#a899ac;letter-spacing:.2em;margin-top:5px}
 .top-right{display:flex;align-items:center;gap:17px}
 .edition{font-size:9px;color:#b8a6bc;letter-spacing:.22em}
-.admin-link{background:transparent;border:1px solid #ffffff30;color:#cbbacb;padding:9px 13px;font-size:9px;letter-spacing:.18em;text-transform:uppercase}
-.admin-link:hover{border-color:var(--gold);color:var(--gold)}
 .view{position:relative;z-index:1}
 .hero{min-height:calc(100vh - 84px);display:grid;grid-template-columns:1.08fr .92fr;align-items:center;gap:4vw;padding-top:50px;padding-bottom:65px;position:relative}
 .hero:before{content:"";position:absolute;top:0;left:45%;height:90%;width:1px;background:linear-gradient(transparent,#d3af7b44,transparent)}
@@ -154,7 +152,7 @@ button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid 
 .finish-actions button{min-width:180px}
 .secondary{height:55px;border:1px solid #ffffff3b;background:transparent;color:#e8dce9;padding:0 22px;font-size:10px;letter-spacing:.16em;text-transform:uppercase}
 .board{margin-top:25px;text-align:left;border-top:1px solid #ffffff24;padding-top:20px}
-.board h3{font:normal 24px Georgia;color:#ecd5b7}
+.board h3{font:normal 24px Georgia;color:#ecd5b7}.idol-gallery{margin-top:46px;text-align:left;border-top:1px solid #ffffff24;padding-top:25px}.idol-gallery-head{text-align:center;margin-bottom:24px}.idol-gallery-head h3{font:normal clamp(27px,4vw,40px) Georgia,serif;color:#f0dfc5;letter-spacing:.04em;margin:10px 0}.idol-gallery-head p{font-size:10px;color:#a99cad;letter-spacing:.08em}.idol-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:14px}.idol-card{min-width:0;border:1px solid #d4b18144;background:linear-gradient(145deg,#211629,#100b15);padding:8px;box-shadow:0 10px 25px #0004}.idol-card img{display:block;width:100%;aspect-ratio:4/5;object-fit:cover;background:#08060b}.idol-card-copy{padding:10px 4px 5px;text-align:center}.idol-card-name{font:normal 15px Georgia,serif;color:#f2dfc4;line-height:1.2}.idol-card-role{font-size:9px;line-height:1.45;color:#c9b2d2;margin-top:6px}@media(max-width:1000px){.idol-grid{grid-template-columns:repeat(5,minmax(0,1fr))}}@media(max-width:700px){.idol-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}.idol-card{padding:6px}.idol-card-name{font-size:13px}.idol-card-role{font-size:8px}}@media(max-width:420px){.idol-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 table{width:100%;border-collapse:collapse;font-size:11px}
 td,th{text-align:left;padding:13px 10px;border-bottom:1px solid #ffffff18}
 th{color:var(--gold);font-size:8px;letter-spacing:.2em;font-weight:600}
@@ -183,7 +181,7 @@ label{display:block;margin:13px 0 7px;color:#b7a9bc;font-weight:700;font-size:9p
 <div class="shell">
 <header class="topbar">
   <div class="mark"><div class="mark-symbol"><span>R</span></div><div class="mark-copy"><b>RETAIL BANKING</b><span>THE PEOPLE EDITION · 2026</span></div></div>
-  <div class="top-right"><div class="edition">AN RB ORIGINAL EXPERIENCE</div><button class="admin-link" onclick="openAdmin()">Control room</button></div>
+  <div class="top-right"><div class="edition">AN RB ORIGINAL EXPERIENCE</div></div>
 </header>
 
 <section id="join" class="view hero">
@@ -199,7 +197,7 @@ label{display:block;margin:13px 0 7px;color:#b7a9bc;font-weight:700;font-size:9p
       <div class="preface-promises"><span>📸 Nhìn một góc ảnh, đoán đúng idol</span><span>⏱️ Càng nhanh, càng chuẩn, càng chứng tỏ bạn là fan ruột</span><span>🏆 Top 3 <strong>Fan Cứng Nhất RB</strong> sẽ được vinh danh!</div>
       <div class="preface-cta">Nhập tên và bắt đầu thôi! 👇</div>
     </div>
-    <div class="hero-meta"><span><b>28</b> MYSTERIES</span><span><b>8s</b> PER ROUND</span><span><b>01</b> CHANCE TO SHINE</span></div>
+    <div class="hero-meta"><span><b>28</b> MYSTERIES</span><span><b>5s</b> PER ROUND</span><span><b>01</b> CHANCE TO SHINE</span></div>
     <div class="start-panel">
       <input id="playerName" class="name-input" maxlength="32" placeholder="Tên bạn sẽ xuất hiện trên bảng vàng..." aria-label="Nickname">
       <button class="cta" onclick="joinGame()">Enter the game <span aria-hidden="true">↗</span></button>
@@ -221,7 +219,7 @@ label{display:block;margin:13px 0 7px;color:#b7a9bc;font-weight:700;font-size:9p
 <section id="game" class="view game-wrap hide">
   <div class="game-top">
     <div><div class="game-title">WHO IS <em>THAT?</em></div><div class="player-tag" id="playerLabel"></div></div>
-    <div class="game-status"><div class="progress-copy">YOUR JOURNEY<b id="progressCopy">01 / 28</b></div><div id="timerRing" class="timer-ring"><span id="timer">8.0</span></div></div>
+    <div class="game-status"><div class="progress-copy">YOUR JOURNEY<b id="progressCopy">01 / 28</b></div><div id="timerRing" class="timer-ring"><span id="timer">5.0</span></div></div>
   </div>
   <div class="progress-track" id="progressTrack"></div>
   <div class="play-card">
@@ -229,7 +227,7 @@ label{display:block;margin:13px 0 7px;color:#b7a9bc;font-weight:700;font-size:9p
     <div class="question-side">
       <div class="question-kicker" id="questionKicker">CASE FILE NO. 001</div>
       <h2 id="questionTitle">Can you recognize<br>the person behind it?</h2>
-      <p>Quan sát thật kỹ. Chọn một đáp án trước khi thời gian kết thúc.</p>
+      <p>Quan sát thật kỹ. Chọn một đáp án trong 5 giây.</p>
       <div class="answers" id="answers"></div>
       <div id="reveal" class="reveal hide"></div>
     </div>
@@ -244,6 +242,7 @@ label{display:block;margin:13px 0 7px;color:#b7a9bc;font-weight:700;font-size:9p
   <div class="finish-stats" id="mySummary"></div>
   <div class="finish-actions"><button class="cta" onclick="showBoard()">See the leaderboard ↗</button><button class="secondary" onclick="playAgain()">Play again</button></div>
   <div class="board"><h3>Hall of Fame</h3><div id="boardRows"></div></div>
+  <section class="idol-gallery"><div class="idol-gallery-head"><div class="finish-kicker">THE RB IDOL LINE-UP</div><h3>ALL 28 IDOLS</h3><p>Gương mặt và danh hiệu của các idol RB.</p></div><div class="idol-grid" id="idolGallery"></div></section>
 </section>
 
 <section id="board" class="view finish-wrap hide">
@@ -252,24 +251,13 @@ label{display:block;margin:13px 0 7px;color:#b7a9bc;font-weight:700;font-size:9p
   <div class="finish-actions"><button class="cta" onclick="home()">Back to the beginning</button><button class="secondary" onclick="playAgain()">Play again</button></div>
 </section>
 
-<section id="admin" class="view admin-wrap hide">
-  <div class="admin-head"><div><div class="kicker">BEHIND THE SCENES</div><h2>Game content</h2></div><button class="admin-button" onclick="home()">← Back to game</button></div>
-  <div class="admin-note">Game có 28 câu. Hint lấy từ cột 3; đáp án hiển thị theo dạng Tên - Chức danh Idol. Tên, đơn vị, hint, chức danh và đường dẫn ảnh nằm trong question-pack.js. Bốn phương án được hệ thống tự chọn ngẫu nhiên từ roster 28 người.</div>
-  <div class="admin-toolbar">
-    <a class="admin-button primary" href="https://github.com/minhkhanhth3012-ops/who-is-that-rb-Copy/edit/main/question-pack.js" target="_blank" rel="noopener">Edit 28-person roster</a>
-    <a class="admin-button" href="https://github.com/minhkhanhth3012-ops/who-is-that-rb-Copy/tree/main/assets" target="_blank" rel="noopener">Upload 54 photos</a>
-    <a class="admin-button" href="https://github.com/minhkhanhth3012-ops/who-is-that-rb-Copy/edit/main/index.html" target="_blank" rel="noopener">Edit website text</a>
-  </div>
-  <div id="adminQuestions"></div>
-</section>
-
 <footer class="footer"><span>WHO IS THAT? · A RETAIL BANKING ORIGINAL</span><span>MADE FOR THE PEOPLE OF RB · 2026</span></footer>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="./backend-config.js"></script>
 <script src="./question-pack.js"></script>
 <script>
-const TOTAL=28,MAX_SCORE=TOTAL*100,QKEY='wit_rb_questions_v4',RKEY='wit_rb_results_v4',LIMIT=8,REVEAL=5;
+const TOTAL=28,MAX_SCORE=TOTAL*100,QKEY='wit_rb_questions_v4',RKEY='wit_rb_results_v4',LIMIT=5,REVEAL=5;
 const $=id=>document.getElementById(id);
 let questions=[],idx=0,player='',logs=[],answered=false,start=0,timer=null,advance=null,finished=false;
 const backendConfig=window.RB_CONFIG||{};
@@ -280,7 +268,7 @@ function toast(message){const t=document.createElement('div');t.className='toast
 function load(){try{const saved=JSON.parse(localStorage.getItem(QKEY)||"null");const localVersion=Number(localStorage.getItem('wit_rb_pack_version')||0),remoteVersion=Number(window.RB_QUESTION_PACK_VERSION||0);if(Array.isArray(window.RB_QUESTION_PACK)&&window.RB_QUESTION_PACK.length===TOTAL&&(remoteVersion>localVersion||!Array.isArray(saved)||saved.length!==TOTAL)){questions=JSON.parse(JSON.stringify(window.RB_QUESTION_PACK));localStorage.setItem(QKEY,JSON.stringify(questions));localStorage.setItem('wit_rb_pack_version',String(remoteVersion))}else{questions=Array.isArray(saved)&&saved.length===TOTAL?saved:blank()}}catch(e){questions=blank()}}
 function save(){localStorage.setItem(QKEY,JSON.stringify(questions));localStorage.setItem('wit_rb_pack_version',String(window.RB_QUESTION_PACK_VERSION||0))}
 function readResults(){try{let all=JSON.parse(localStorage.getItem(RKEY));if(!Array.isArray(all)){all=JSON.parse(localStorage.getItem('wit_rb_results_v2')||'[]');localStorage.setItem(RKEY,JSON.stringify(all))}return Array.isArray(all)?all:[]}catch(e){return []}}
-function view(id){['join','game','finish','board','admin'].forEach(x=>$(x).classList.toggle('hide',x!==id));window.scrollTo({top:0,behavior:'smooth'})}
+function view(id){['join','game','finish','board'].forEach(x=>$(x).classList.toggle('hide',x!==id));window.scrollTo({top:0,behavior:'smooth'})}
 function joinGame(){const n=$('playerName').value.trim();if(!n){$('playerName').focus();toast('Nhập nickname trước khi vào game nhé.');return}player=n;idx=0;logs=[];finished=false;$('playerLabel').textContent='PLAYER · '+player.toUpperCase();view('game');renderQuestion()}
 function shuffleList(list){const a=list.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
 function makeChoices(q){const others=questions.filter(x=>x.id!==q.id&&x.person);const selected=shuffleList([q,...shuffleList(others).slice(0,3)]);const options=selected.map(x=>x.person+' - '+(x.role||'Chưa có chức danh'));q._choices=options;q._correctIndex=selected.findIndex(x=>x.id===q.id);return options}
@@ -290,10 +278,10 @@ function renderQuestion(){
   if(idx>=TOTAL){finish();return}
   answered=false;
   const q=questions[idx];
-  $('questionTitle').innerHTML=esc(q.question||'Can you recognize\\nthe person behind it?').replace(/\\n/g,'<br>');
+  $('questionTitle').innerHTML=esc(q.question||'Can you recognize the idol?').replace(/\\n/g,'<br>');
   $('progressCopy').textContent=String(idx+1).padStart(2,'0')+' / '+TOTAL;
   $('questionKicker').textContent='CASE FILE NO. '+String(idx+1).padStart(3,'0');
-  $('timer').textContent='8.0';$('timerRing').style.background='conic-gradient(var(--gold) 100%,#ffffff16 0)';
+  $('timer').textContent='5.0';$('timerRing').style.background='conic-gradient(var(--gold) 100%,#ffffff16 0)';
   $('timerRing').classList.remove('urgent');
   for(let i=0;i<TOTAL;i++)$('seg'+i).classList.toggle('done',i<idx);
   $('reveal').className='reveal hide';$('reveal').innerHTML='';$('bigReveal').className='big-reveal hide';$('bigReveal').innerHTML='';
@@ -321,12 +309,15 @@ function renderQuestion(){
 function choose(j){
   if(answered)return;answered=true;clearInterval(timer);
   const q=questions[idx],correct=j!==null&&q._correctIndex===j,secs=Math.min(LIMIT,(Date.now()-start)/1000);
-  const pts=correct?(secs<=2?100:secs<=4?90:secs<=6?75:60):0;
+  const pts=correct?(secs<=1.25?100:secs<=2.5?90:secs<=3.75?75:60):0;
   logs.push({question:idx+1,choice:j,correct,seconds:+secs.toFixed(2),points:pts});
   [...$('answers').children].forEach((b,k)=>{b.disabled=true;if(k===q._correctIndex)b.classList.add('correct');else if(k===j)b.classList.add('wrong')});
   $('bigReveal').className='big-reveal';
-  $('bigReveal').innerHTML='<div class="big-reveal-photo">'+(q.original?'<img src="'+q.original+'" alt="Ảnh gốc">':'<div class="photo-empty"><b>★</b>ẢNH GỐC SẼ ĐƯỢC CẬP NHẬT</div>')+'</div><div class="big-reveal-copy"><div class="reveal-head">'+(correct?'✓ FAN RUỘT ĐÃ NHẬN RA IDOL':j===null?'HẾT GIỜ · BẬT MÍ DANH TÍNH':'BẬT MÍ DANH TÍNH · HẸN CÂU SAU')+'</div><div class="reveal-person">'+esc(q.person||'Chưa thiết lập tên nhân vật')+'</div><div class="role-plaque"><span>THE IDOL ROLE</span><strong>'+esc(q.role||'Chưa phân vai idol')+'</strong></div><div class="reveal-department">'+(q.department?'BAN / ĐƠN VỊ · '+esc(q.department):'')+'</div><div class="reveal-divider"></div><div class="reveal-foot"><span>'+(j===null?'Bạn đã hết 8 giây':'Bạn trả lời trong '+secs.toFixed(2)+' giây')+'</span><strong>+'+pts+' PTS</strong></div><div class="next-count">NEXT REVEAL IN 5 SECONDS</div></div>';
+  $('bigReveal').innerHTML='<div class="big-reveal-photo">'+(q.original?'<img src="'+q.original+'" alt="Ảnh gốc">':'<div class="photo-empty"><b>★</b>ẢNH GỐC SẼ ĐƯỢC CẬP NHẬT</div>')+'</div><div class="big-reveal-copy"><div class="reveal-head">'+(correct?'✓ FAN RUỘT ĐÃ NHẬN RA IDOL':j===null?'HẾT GIỜ · BẬT MÍ DANH TÍNH':'BẬT MÍ DANH TÍNH · HẸN CÂU SAU')+'</div><div class="reveal-person">'+esc(q.person||'Chưa thiết lập tên nhân vật')+'</div><div class="role-plaque"><span>THE IDOL ROLE</span><strong>'+esc(q.role||'Chưa phân vai idol')+'</strong></div><div class="reveal-department">'+(q.department?'BAN / ĐƠN VỊ · '+esc(q.department):'')+'</div><div class="reveal-divider"></div><div class="reveal-foot"><span>'+(j===null?'Bạn đã hết 5 giây':'Bạn trả lời trong '+secs.toFixed(2)+' giây')+'</span><strong>+'+pts+' PTS</strong></div><div class="next-count">NEXT REVEAL IN 5 SECONDS</div></div>';
   advance=setTimeout(()=>{idx++;renderQuestion()},REVEAL*1000);
+}
+function renderIdolGallery(){
+  $('idolGallery').innerHTML=questions.map(q=>'<article class="idol-card"><img loading="lazy" src="'+esc(q.original)+'" alt="'+esc(q.person)+'"><div class="idol-card-copy"><div class="idol-card-name">'+esc(q.person)+'</div><div class="idol-card-role">'+esc(q.role||'')+'</div></div></article>').join('');
 }
 async function finish(){
   clearInterval(timer);if(finished)return;finished=true;
@@ -337,6 +328,7 @@ async function finish(){
   $('finalScore').textContent=points;
   $('mySummary').innerHTML='<div><b>'+correct+'/'+TOTAL+'</b><span>IDENTITIES GUESSED</span></div><div><b>'+time+'s</b><span>TIME IN THE GAME</span></div><div><b>'+Math.round(correct/TOTAL*100)+'%</b><span>ACCURACY</span></div>';
   $('boardRows').innerHTML=boardTable(all);
+  renderIdolGallery();
   view('finish');
   if(db){
     const {error}=await db.from('rb_game_results').insert({player_name:player,score:points,correct_count:correct,total_seconds:time});
@@ -391,10 +383,6 @@ function boardTable(all){
 async function showBoard(){view('board');await refreshFullBoard()}
 function playAgain(){$('playerName').value=player;joinGame()}
 function home(){clearInterval(timer);clearTimeout(advance);view('join')}
-function openAdmin(){renderAdmin();view('admin')}
-function renderAdmin(){
-  $('adminQuestions').innerHTML='<div class="qrow"><b>ROSTER · '+questions.length+' PEOPLE</b>'+questions.map(q=>'<div class="live-rank-row"><span class="live-rank-no">'+String(q.id).padStart(2,'0')+'</span><span class="live-rank-name">'+esc(q.person)+'<small class="live-rank-detail">'+esc(q.department||'')+'</small></span><span class="small-muted">'+(q.role?esc(q.role):'CHƯA PHÂN VAI')+'</span></div>').join('')+'</div>';
-}
 $('playerName').addEventListener('keydown',e=>{if(e.key==='Enter')joinGame()});
 load();buildProgress();startLiveLeaderboard();
 </script>
