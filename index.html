@@ -204,7 +204,7 @@ label{display:block;margin:13px 0 7px;color:#b7a9bc;font-weight:700;font-size:9p
 
 <section id="admin" class="view admin-wrap hide">
   <div class="admin-head"><div><div class="kicker">BEHIND THE SCENES</div><h2>Control room</h2></div><button class="admin-button" onclick="home()">← Back to game</button></div>
-  <div class="admin-note">Thiết lập 29 câu hỏi, 4 lựa chọn và đáp án đúng. Nội dung đang được lưu trong trình duyệt quản trị này; để tất cả người chơi ở các thiết bị khác cùng thấy một bộ ảnh/câu hỏi và cùng bảng xếp hạng, cần kết nối kho dữ liệu dùng chung ở bước tiếp theo.</div>
+  <div class="admin-note">Thiết lập 29 câu hỏi, 4 lựa chọn và đáp án đúng. Bộ ảnh/câu hỏi hiện lưu trong trình duyệt quản trị này; mình sẽ đưa question pack lên website sau khi bạn hoàn tất nội dung để mọi người cùng thấy một bộ câu hỏi. Bảng xếp hạng chung có hỗ trợ Supabase sau khi cấu hình dự án.</div>
   <div class="admin-toolbar"><button class="admin-button" onclick="exportJSON()">↓ Export question pack</button><label class="admin-button">↑ Import question pack <input type="file" accept=".json" hidden onchange="importJSON(event)"></label></div>
   <div id="adminQuestions"></div>
   <div class="admin-toolbar"><button class="admin-button primary" onclick="saveAdmin()">Save all 29 questions</button><button class="admin-button" onclick="resetQuestions()">Reset questions</button></div>
@@ -223,8 +223,9 @@ const db=(window.supabase&&backendConfig.supabaseUrl&&backendConfig.supabaseAnon
 const blank=()=>Array.from({length:29},(_,i)=>({id:i+1,crop:'',original:'',choices:['Đồng nghiệp A','Đồng nghiệp B','Đồng nghiệp C','Đồng nghiệp D'],correct:0}));
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function toast(message){const t=document.createElement('div');t.className='toast';t.textContent=message;document.body.appendChild(t);setTimeout(()=>t.remove(),2600)}
-function load(){try{const saved=JSON.parse(localStorage.getItem(QKEY));questions=Array.isArray(saved)&&saved.length===29?saved:blank()}catch(e){questions=blank()}}
+function load(){try{let saved=JSON.parse(localStorage.getItem(QKEY));if(!Array.isArray(saved))saved=JSON.parse(localStorage.getItem("wit_rb_questions_v2")||"null");questions=Array.isArray(saved)&&saved.length===29?saved:blank()}catch(e){questions=blank()}}
 function save(){localStorage.setItem(QKEY,JSON.stringify(questions))}
+function readResults(){try{let all=JSON.parse(localStorage.getItem(RKEY));if(!Array.isArray(all)){all=JSON.parse(localStorage.getItem('wit_rb_results_v2')||'[]');localStorage.setItem(RKEY,JSON.stringify(all))}return Array.isArray(all)?all:[]}catch(e){return []}}
 function view(id){['join','game','finish','board','admin'].forEach(x=>$(x).classList.toggle('hide',x!==id));window.scrollTo({top:0,behavior:'smooth'})}
 function joinGame(){const n=$('playerName').value.trim();if(!n){$('playerName').focus();toast('Nhập nickname trước khi vào game nhé.');return}player=n;idx=0;logs=[];finished=false;$('playerLabel').textContent='PLAYER · '+player.toUpperCase();view('game');renderQuestion()}
 function buildProgress(){ $('progressTrack').innerHTML=Array.from({length:29},(_,i)=>'<i id="seg'+i+'"></i>').join('') }
@@ -268,7 +269,7 @@ function choose(j){
 async function finish(){
   clearInterval(timer);if(finished)return;finished=true;
   const points=logs.reduce((s,a)=>s+a.points,0),correct=logs.filter(a=>a.correct).length,time=+logs.reduce((s,a)=>s+a.seconds,0).toFixed(2);
-  let all=[];try{all=JSON.parse(localStorage.getItem(RKEY)||'[]')}catch(e){all=[]}
+  let all=readResults();
   all.push({name:player,score:points,correct,time,date:new Date().toISOString()});
   localStorage.setItem(RKEY,JSON.stringify(all));
   $('finalScore').textContent=points;
@@ -295,7 +296,7 @@ async function showBoard(){
     $('standaloneBoard').innerHTML=boardTable((data||[]).map(x=>({name:x.player_name,score:x.score,correct:x.correct_count,time:Number(x.total_seconds),date:x.created_at})));
     return;
   }
-  let all=[];try{all=JSON.parse(localStorage.getItem(RKEY)||'[]')}catch(e){}
+  let all=readResults();
   $('standaloneBoard').innerHTML=boardTable(all)+'<p class="small-muted">Bảng xếp hạng hiện chỉ hiển thị kết quả trên thiết bị này. Chưa kết nối dữ liệu dùng chung.</p>';
 }
 function playAgain(){$('playerName').value=player;joinGame()}
