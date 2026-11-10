@@ -2,7 +2,7 @@
 // question = Role only; slogan is revealed after the answer.
 // role = Idol title; slogan = signature line shown only on the reveal screen.
 // Photo paths use the q-code in the last column of the supplied table.
-window.RB_QUESTION_PACK_VERSION = 9;
+window.RB_QUESTION_PACK_VERSION = 10;
 window.RB_QUESTION_PACK = [
   {
     "id": 1,
@@ -48,10 +48,10 @@ window.RB_QUESTION_PACK = [
     "id": 5,
     "person": "Anh Trí",
     "department": "SPT&DVTTT",
-    "question": "Tổng tài thẻ",
+    "question": "Tổng tài nghìn tỷ",
     "crop": "assets/q01_crop.png",
     "original": "assets/q01_original.png",
-    "role": "Tổng tài thẻ",
+    "role": "Tổng tài nghìn tỷ",
     "slogan": "Không cần sở hữu thẻ đen, anh tạo ra nó."
   },
   {
@@ -218,10 +218,10 @@ window.RB_QUESTION_PACK = [
     "id": 22,
     "person": "Cường",
     "department": "TTAH",
-    "question": "Tổng tài",
+    "question": "Tổng tài dữ liệu",
     "crop": "assets/q24_crop.png",
     "original": "assets/q24_original.png",
-    "role": "Tổng tài",
+    "role": "Tổng tài dữ liệu",
     "slogan": "Trời lạnh rồi, drop bảng đó đi."
   },
   {
