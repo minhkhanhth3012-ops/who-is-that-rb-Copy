@@ -254,7 +254,7 @@ label{display:block;margin:13px 0 7px;color:#b7a9bc;font-weight:700;font-size:9p
 
 <section id="admin" class="view admin-wrap hide">
   <div class="admin-head"><div><div class="kicker">BEHIND THE SCENES</div><h2>Game content</h2></div><button class="admin-button" onclick="home()">← Back to game</button></div>
-  <div class="admin-note">Game có 28 câu theo đúng danh sách nhân vật mới bạn cung cấp. Tên, đơn vị, câu hỏi riêng cho từng nhân vật, danh hiệu Idol và đường dẫn ảnh nằm trong question-pack.js. Bốn phương án trắc nghiệm được hệ thống tự chọn ngẫu nhiên từ roster 28 người. Để thay đổi nội dung công khai, chỉnh trực tiếp file trên GitHub rồi Commit changes.</div>
+  <div class="admin-note">Game có 28 câu. Hint lấy từ cột 3; đáp án hiển thị theo dạng Tên - Chức danh Idol. Tên, đơn vị, hint, chức danh và đường dẫn ảnh nằm trong question-pack.js. Bốn phương án được hệ thống tự chọn ngẫu nhiên từ roster 28 người.</div>
   <div class="admin-toolbar">
     <a class="admin-button primary" href="https://github.com/minhkhanhth3012-ops/who-is-that-rb-Copy/edit/main/question-pack.js" target="_blank" rel="noopener">Edit 28-person roster</a>
     <a class="admin-button" href="https://github.com/minhkhanhth3012-ops/who-is-that-rb-Copy/tree/main/assets" target="_blank" rel="noopener">Upload 54 photos</a>
@@ -283,7 +283,7 @@ function readResults(){try{let all=JSON.parse(localStorage.getItem(RKEY));if(!Ar
 function view(id){['join','game','finish','board','admin'].forEach(x=>$(x).classList.toggle('hide',x!==id));window.scrollTo({top:0,behavior:'smooth'})}
 function joinGame(){const n=$('playerName').value.trim();if(!n){$('playerName').focus();toast('Nhập nickname trước khi vào game nhé.');return}player=n;idx=0;logs=[];finished=false;$('playerLabel').textContent='PLAYER · '+player.toUpperCase();view('game');renderQuestion()}
 function shuffleList(list){const a=list.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
-function makeChoices(q){const otherNames=questions.filter(x=>x.id!==q.id&&x.person).map(x=>x.person);const options=shuffleList([q.person,...shuffleList(otherNames).slice(0,3)]);q._choices=options;q._correctIndex=options.indexOf(q.person);return options}
+function makeChoices(q){const others=questions.filter(x=>x.id!==q.id&&x.person);const selected=shuffleList([q,...shuffleList(others).slice(0,3)]);const options=shuffleList(selected).map(x=>x.person+' - '+(x.role||'Chưa có chức danh'));q._choices=options;q._correctIndex=selected.findIndex(x=>x.id===q.id);return options}
 function buildProgress(){ $('progressTrack').innerHTML=Array.from({length:TOTAL},(_,i)=>'<i id="seg'+i+'"></i>').join('') }
 function renderQuestion(){
   clearInterval(timer);clearTimeout(advance);
