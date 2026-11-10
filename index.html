@@ -385,7 +385,7 @@ function startLiveLeaderboard(){
 }
 function boardTable(all){
   const list=all.slice().sort((a,b)=>b.score-a.score||a.time-b.time);
-  return list.length?'<table><thead><tr><th>RANK</th><th>PLAYER</th><th>POINTS</th><th>CORRECT</th><th>TIME</th></tr></thead><tbody>'+list.map((x,i)=>'<tr><td>#'+(i+1)+'</td><td>'+esc(x.name)+'</td><td><b>'+x.score+'</b></td><td>'+x.correct+'/'+TOTAL+'</td>'<td>'+x.time+'s</td></tr>').join('')+'</tbody></table>':'<p class="small-muted">Chưa có lượt chơi nào.</p>';
+  return list.length?'<table><thead><tr><th>RANK</th><th>PLAYER</th><th>POINTS</th><th>CORRECT</th><th>TIME</th></tr></thead><tbody>'+list.map((x,i)=>'<tr><td>#'+(i+1)+'</td><td>'+esc(x.name)+'</td><td><b>'+x.score+'</b></td><td>'+x.correct+'/'+TOTAL+'</td><td>'+x.time+'s</td></tr>').join('')+'</tbody></table>':'<p class="small-muted">Chưa có lượt chơi nào.</p>';
 }
 async function showBoard(){view('board');await refreshFullBoard()}
 function playAgain(){$('playerName').value=player;joinGame()}
