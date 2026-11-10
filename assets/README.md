@@ -1,17 +1,15 @@
-# RB Men's Day photo assets — 27 people / 54 images
+# RB Men's Day photo assets — 28 people / 56 images
 
-Upload these 54 JPG files directly into this folder. Filenames are case-sensitive and must match exactly.
+Upload these 56 JPG files directly into this folder. Filenames are case-sensitive and must match exactly.
 
-For each roster row, the crop is the clue and the original is displayed on the reveal screen:
-
-- q01_crop.jpg
-- q01_original.jpg
-- q02_crop.jpg
-- q02_original.jpg
+For each q-code in the last column of the roster table, upload both files:
+- q01_crop.jpg and q01_original.jpg
+- q02_crop.jpg and q02_original.jpg
 - ...
-- q27_crop.jpg
-- q27_original.jpg
+- q28_crop.jpg and q28_original.jpg
 
-The mapping follows the STT order in `question-pack.js`. The names, departments and correct identities are already preloaded there. The game randomly creates three other-name distractors from the 27-person roster, so you do not need to manually enter four answers per question.
+Important: q-codes map to the photos, not to the question order. For example, the first roster person (Anh Chiến) uses q07; Tiến uses q02; Anh Trí uses q01. The mapping is preloaded in `question-pack.js`.
+
+The game randomly creates three distractors from the other 27 people. You do not need to enter four answers manually.
 
 After uploading, commit the files. GitHub Pages will redeploy automatically.
