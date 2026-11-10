@@ -252,7 +252,7 @@ const QKEY='wit_rb_questions_v3',RKEY='wit_rb_results_v3',LIMIT=15,REVEAL=5;
 const $=id=>document.getElementById(id);
 let questions=[],idx=0,player='',logs=[],answered=false,start=0,timer=null,advance=null,finished=false;
 const backendConfig=window.RB_CONFIG||{};
-const db=(window.supabase&&backendConfig.supabaseUrl&&backendConfig.supabaseAnonKey)?window.supabase.createClient(backendConfig.supabaseUrl,backendConfig.supabaseAnonKey):null;
+const db=(window.supabase&&backendConfig.supabaseUrl&&backendConfig.supabasePublishableKey)?window.supabase.createClient(backendConfig.supabaseUrl,backendConfig.supabaseAnonKey):null;
 const blank=()=>Array.from({length:29},(_,i)=>({id:i+1,crop:'',original:'',role:'',choices:['Đồng nghiệp A','Đồng nghiệp B','Đồng nghiệp C','Đồng nghiệp D'],correct:0}));
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function toast(message){const t=document.createElement('div');t.className='toast';t.textContent=message;document.body.appendChild(t);setTimeout(()=>t.remove(),2600)}
