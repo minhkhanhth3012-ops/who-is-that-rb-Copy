@@ -563,7 +563,7 @@ body:after{opacity:.055}
   <h2>YOU MADE<br><em style="color:var(--gold);font-weight:400">THE CUT.</em></h2>
   <div class="finish-score" id="finalScore">0</div><div class="finish-caption">TOTAL POINTS</div>
   <div class="finish-stats" id="mySummary"></div>
-  <div class="finish-actions"><button class="cta" onclick="showBoard()">See the leaderboard ↗</button><button class="secondary" onclick="playAgain()">Play again</button></div>
+  <div class="finish-actions"><button class="cta" onclick="showBoard()">See the leaderboard ↗</button><button class="secondary" onclick="playAgain()">Đã dùng lượt chơi</button></div>
   <div class="board"><h3>Hall of Fame</h3><div id="boardRows"></div></div>
   <section class="idol-gallery"><div class="idol-gallery-head"><div class="finish-kicker">THE RB IDOL LINE-UP</div><h3>ALL 28 IDOLS</h3><p>Gương mặt và danh hiệu của các idol RB.</p></div><div class="idol-grid" id="idolGallery"></div></section>
 </section>
@@ -571,7 +571,7 @@ body:after{opacity:.055}
 <section id="board" class="view finish-wrap hide">
   <div class="finish-kicker">THE PEOPLE WHO STOOD OUT</div><h2>HALL OF<br><em style="color:var(--gold);font-weight:400">FAME.</em></h2>
   <div id="standaloneBoard"></div>
-  <div class="finish-actions"><button class="cta" onclick="home()">Back to the beginning</button><button class="secondary" onclick="playAgain()">Play again</button></div>
+  <div class="finish-actions"><button class="cta" onclick="home()">Back to the beginning</button><button class="secondary" onclick="playAgain()">Đã dùng lượt chơi</button></div>
 </section>
 
 <footer class="footer"><span>WHO IS THAT? · A RETAIL BANKING ORIGINAL</span><span>MADE FOR THE PEOPLE OF RB · 2026</span></footer>
@@ -618,24 +618,26 @@ async function joinGame(){
   joining=true;
   const startButton=document.querySelector('.start-panel .cta');
   if(startButton){startButton.disabled=true;startButton.textContent='CHECKING DEVICE…'}
+  // Lock immediately so another tab on this browser profile cannot start in parallel.
+  localStorage.setItem(PLAYED_KEY,'1');
   try{
     if(db){
       const {data,error}=await db.from('rb_game_results').select('id').eq('device_id',deviceId).limit(1);
       if(error){
+        localStorage.removeItem(PLAYED_KEY);
         toast('Chưa kiểm tra được thiết bị. Hãy chạy SQL mới trong supabase-schema.sql rồi thử lại.');
         return;
       }
       if(data&&data.length){
-        localStorage.setItem(PLAYED_KEY,'1');
         toast('Thiết bị này đã có một lượt chơi. Không thể chơi lại nhé!');
         return;
       }
     }
-    localStorage.setItem(PLAYED_KEY,'1');
     player=n;idx=0;logs=[];finished=false;
     $('playerLabel').textContent='PLAYER · '+player.toUpperCase();
     view('game');renderQuestion();
   }catch(e){
+    localStorage.removeItem(PLAYED_KEY);
     toast('Không kiểm tra được lượt chơi. Hãy tải lại trang và thử lại.');
   }finally{
     joining=false;
