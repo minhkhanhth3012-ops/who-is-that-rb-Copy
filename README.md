@@ -5,7 +5,7 @@ A cinematic, self-paced guessing game for 28 RB colleagues. There is no MC and n
 ## Player experience
 - Intro preface: **RB MEN'S DAY 11/11 — IDOL RB LÀ AI?**
 - 28 cropped-photo clues, one for each person in the roster
-- 8 seconds to answer each question
+- 5 seconds to answer each question
 - After an answer or timeout, a large cinematic reveal displays the corresponding original photo, correct name, unit, and Idol role/tagline
 - Reveal remains for five seconds, then the next clue starts automatically
 - Speed-based scoring: 100 / 90 / 75 / 60 for correct answers according to response time
@@ -38,7 +38,7 @@ After editing `question-pack.js`, increment `RB_QUESTION_PACK_VERSION` so browse
 ## Shared leaderboard
 The site uses the configured Supabase project. The database stores results; the homepage shows the public Top 3, and Hall of Fame shows the full leaderboard. Supabase Realtime listens for new result inserts, with a 15-second polling fallback.
 
-The database schema and migration are in `supabase-schema.sql`. The 28-question game has a maximum of 2,800 points, 28 correct answers, and 224 answer-seconds. **Run the updated SQL in Supabase SQL Editor** to expand the existing database constraints from the previous 27-question version; otherwise a perfect 28/28 result may fail to submit to the shared leaderboard.
+The database schema and migration are in `supabase-schema.sql`. The 28-question game has a maximum of 2,800 points, 28 correct answers, and 140 answer-seconds. **Run the updated SQL in Supabase SQL Editor** to expand the existing database constraints from the previous 27-question version; otherwise a perfect 28/28 result may fail to submit to the shared leaderboard.
 
 Older results remain in the database and were recorded under the previous 27-question format, so they are not directly comparable with the new maximum score.
 
@@ -47,3 +47,6 @@ This repository and GitHub Pages site are public. Any published colleague photos
 
 ## Deployment
 GitHub Actions validates the JavaScript and deploys the site to GitHub Pages whenever changes are pushed to `main`.
+
+
+The public Control Room has been removed. After completing all questions, each player sees an All 28 Idols gallery below the score and leaderboard, showing original photo, name, and Idol title. Each answer round allows five seconds; the five-second reveal transition remains after each answer.
