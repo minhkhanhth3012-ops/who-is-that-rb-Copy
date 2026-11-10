@@ -175,6 +175,329 @@ label{display:block;margin:13px 0 7px;color:#b7a9bc;font-weight:700;font-size:9p
 @media(max-width:850px){.hero{grid-template-columns:1fr;gap:5px;padding-top:40px}.hero:before{display:none}.hero-copy{padding-bottom:0}.hero-art{height:430px;min-height:0;margin-top:4px}.art-frame{height:100%;width:min(72%,420px)}.art-side{right:4%}.play-card{grid-template-columns:1fr}.photo-stage{min-height:340px;border-right:0;border-bottom:1px solid #d4b18133}.photo-stage img{max-height:380px}.question-side{padding:30px}.game-wrap{padding-top:25px}}
 @media(max-width:700px){.big-reveal{grid-template-columns:1fr;grid-template-rows:minmax(200px,1fr) auto;overflow:auto}.big-reveal-photo{min-height:230px;border-right:0;border-bottom:1px solid #d6b47d55}.big-reveal-photo img{max-height:300px}.big-reveal-copy{padding:19px 22px}.reveal-person{font-size:35px;margin:10px 0}.role-plaque{padding:10px 13px}.reveal-divider{margin:12px 0}.next-count{margin-top:10px}}
 @media(max-width:560px){.shell{padding:0 19px}.topbar{height:68px}.edition{display:none}.hero{min-height:auto;padding-top:48px;padding-bottom:30px}.hero h1{font-size:clamp(60px,17vw,92px);margin:23px 0 16px}.hero h1 .gold{margin-left:17vw}.hero-art{height:350px}.art-frame{width:76%}.start-panel{grid-template-columns:1fr;gap:9px}.name-input,.cta{height:53px}.hero-meta{gap:14px}.bottomline{padding:15px 0 21px}.game-top{align-items:flex-start}.game-title{font-size:22px}.timer-ring{width:56px;height:56px}.progress-track{gap:2px}.play-card{min-height:0}.photo-stage{min-height:250px}.photo-stage:before,.photo-stage:after{height:18px}.photo-label{top:32px;left:19px}.question-side{padding:24px 19px}.question-side h2{font-size:34px}.answers{grid-template-columns:1fr}.answer{min-height:55px}.finish-wrap{margin:30px auto 55px}.finish-stats{gap:24px}.admin-grid,.choice-grid{grid-template-columns:1fr}.admin-head h2{font-size:28px}.footer{font-size:7px}}
+
+/* ===== RB IDOL STAGE — visual refresh ===== */
+:root{
+  --ink:#080611;--plum:#1a1029;--violet:#8c42d8;--lav:#ddbaff;
+  --gold:#ffc45c;--gold2:#ffe7b4;--white:#fff9f4;--muted:#b6a8c2;
+  --line:#ffffff20;--green:#8df0c7;--red:#ff718e;
+}
+body{
+  background:#080611;
+  background-image:
+    radial-gradient(ellipse at 12% 12%,#7022a044 0,transparent 35%),
+    radial-gradient(ellipse at 88% 33%,#d17b2b22 0,transparent 28%),
+    radial-gradient(ellipse at 45% 100%,#48207844 0,transparent 42%);
+}
+body:before{
+  background:
+    radial-gradient(ellipse at 50% -12%,#9347d344,transparent 43%),
+    radial-gradient(ellipse at 88% 55%,#a6534a20,transparent 30%),
+    linear-gradient(135deg,#07050d 0%,#140b20 52%,#080611 100%);
+}
+body:after{opacity:.055}
+.shell{max-width:1440px}
+.topbar{border-bottom-color:#a66ad044}
+.mark-symbol{border-color:#c88cffaa;color:#d5a5ff;box-shadow:0 0 26px #9f42df35}
+.mark-copy b{letter-spacing:.27em}
+.edition{color:#d1b8e3}
+.hero h1 .outline{-webkit-text-stroke:1px #ecd9ff}
+.hero h1 .gold{color:#ffe0a0;text-shadow:0 0 45px #f0b85a35}
+.hero:before{background:linear-gradient(transparent,#b47ad655,transparent)}
+.art-halo{background:radial-gradient(circle,#a64aff35 0%,#e9b15f12 42%,transparent 72%)}
+.art-light{background:linear-gradient(90deg,transparent,#b76aff18 43%,#ffcb7455 50%,#b76aff25 57%,transparent)}
+.art-frame{border:1px solid #c98cff77;box-shadow:0 40px 110px #000b,0 0 60px #8f3cbd22}
+.art-frame:before{border-color:#e4c5ff30}
+.live-board-card{border:1px solid #a46add77;border-radius:14px;background:linear-gradient(135deg,#2a1740e8,#100a1af2);box-shadow:0 20px 50px #0008,0 0 28px #8b43cf16}
+.start-panel .name-input{border-color:#a66ad477;border-radius:12px;background:#ffffff09}
+.cta{border-radius:12px;border-color:#ffd17b;background:linear-gradient(110deg,#ffbd56,#ffe2a5);box-shadow:0 9px 32px #d9953d28}
+.cta:hover{box-shadow:0 14px 38px #d9953d42}
+.secondary{border-radius:12px}
+.game-wrap{padding-top:34px}
+.game-title{font-size:29px}
+.player-tag{color:#c4afd4}
+.game-status{gap:18px}
+.timer-ring{width:70px;height:70px;box-shadow:0 0 30px #9b58da20}
+.timer-ring:before{background:#100a19}
+.timer-ring span{font-weight:800}
+.progress-track{gap:5px;margin:20px 0 30px}
+.progress-track i{height:4px;border-radius:9px;background:#ffffff18}
+.progress-track i.done{background:linear-gradient(90deg,#a34cf2,#ffd078);box-shadow:0 0 11px #b56ce9aa}
+.play-card{
+  min-height:610px;grid-template-columns:1.08fr .92fr;overflow:hidden;
+  border:1px solid #a66add88;border-radius:22px;
+  background:linear-gradient(130deg,#1c1129f5,#0c0814f7);
+  box-shadow:0 35px 100px #000a,0 0 65px #762caf18;
+  isolation:isolate;
+}
+.photo-stage{
+  min-height:610px;border-right:1px solid #b77ce255;
+  background:
+    radial-gradient(ellipse at 50% 40%,#7b3ca944 0,transparent 43%),
+    radial-gradient(ellipse at 50% 100%,#f3b65b20 0,transparent 38%),
+    linear-gradient(150deg,#1d122c,#0a0711 78%);
+}
+.photo-stage:before{
+  inset:18px;height:auto;left:18px;right:18px;top:18px;bottom:18px;
+  background:none;border:1px solid #d8b5ff35;border-radius:13px;
+  box-shadow:inset 0 0 45px #a44ce70b;pointer-events:none;
+}
+.photo-stage:after{
+  inset:0;height:auto;left:0;right:0;bottom:0;
+  background:radial-gradient(ellipse at 50% 45%,transparent 28%,#08061166 100%);
+  pointer-events:none;z-index:0;
+}
+.photo-stage #cropBox{
+  position:absolute;inset:34px;z-index:1;display:flex;
+  align-items:center;justify-content:center;padding:10px;
+}
+.photo-stage #cropBox img{
+  width:100%!important;height:100%!important;max-height:100%!important;
+  object-fit:contain!important;
+  filter:drop-shadow(0 25px 32px #000b) drop-shadow(0 0 20px #d5a6ff2c);
+  animation:clueFloat 5s ease-in-out infinite;
+}
+.photo-label{
+  top:33px;left:34px;padding:8px 11px;border:1px solid #c38af04d;
+  background:#150d20c9;border-radius:7px;color:#e2c3ff;
+  font-size:8px;z-index:4;
+}
+.question-side{
+  position:relative;padding:clamp(28px,4.4vw,64px);
+  background:radial-gradient(ellipse at 100% 0,#7838a326,transparent 45%);
+}
+.question-side:before{
+  content:"";position:absolute;top:0;left:0;width:3px;height:100%;
+  background:linear-gradient(transparent,#bd78ff,#ffca72,transparent);opacity:.75;
+}
+.question-kicker{
+  display:flex;align-items:center;gap:10px;color:#d39cff;font-weight:800;
+}
+.question-kicker:before{content:"";width:23px;height:1px;background:#d39cff}
+.question-side h2{
+  font:normal clamp(30px,3.5vw,50px)/1.08 Georgia,serif;
+  color:#fff7ee;letter-spacing:-.035em;margin:22px 0 13px;
+}
+.question-side h2 em{
+  display:inline-block;color:#ffe0a0;font-style:italic;
+  text-shadow:0 0 28px #e2a44c30;
+}
+.question-side p{font-size:12px;color:#c2b4cd;line-height:1.7;margin-bottom:26px}
+.answers{gap:12px}
+.answer{
+  min-height:75px;border:1px solid #a77bc444;border-radius:13px;
+  background:linear-gradient(145deg,#ffffff0b,#ffffff03);
+  padding:12px 14px;gap:13px;position:relative;overflow:hidden;
+  box-shadow:inset 0 1px #ffffff0b,0 8px 18px #0002;
+}
+.answer:before{
+  content:"";position:absolute;inset:0;opacity:0;
+  background:linear-gradient(110deg,#a94cf21b,transparent 65%);transition:.22s;
+}
+.answer:hover:not(:disabled){
+  transform:translateY(-2px);border-color:#d8a6ff;
+  background:linear-gradient(145deg,#572c782e,#ffffff07);
+  box-shadow:0 13px 28px #0005,0 0 22px #9d51d728;
+}
+.answer:hover:not(:disabled):before{opacity:1}
+.letter{
+  width:34px;height:34px;border-radius:10px;border:1px solid #bd83ef88;
+  background:#7b38a82b;color:#e1baff;font:bold 14px Arial;position:relative;
+}
+.answer-text{font-size:11px;line-height:1.45;letter-spacing:.015em;font-weight:700;position:relative}
+.answer.correct{border-color:#70e5b6;background:#1f79522b;box-shadow:0 0 20px #48cd9940}
+.answer.wrong{border-color:#ff718e;background:#8e284029}
+.big-reveal{
+  inset:0;grid-template-columns:1.08fr .92fr;
+  border-radius:21px;overflow:hidden;
+  background:
+    radial-gradient(ellipse at 23% 25%,#8e43c85c,transparent 48%),
+    radial-gradient(ellipse at 78% 94%,#f0a64b1c,transparent 42%),
+    linear-gradient(130deg,#1e112b,#090610 82%);
+  animation:revealCurtain .55s cubic-bezier(.18,.8,.22,1) both;
+}
+.big-reveal-photo{
+  min-height:100%;padding:30px;
+  border-right:1px solid #c18cf266;
+  background:
+    radial-gradient(ellipse at 50% 44%,#af6bea48 0,transparent 47%),
+    radial-gradient(ellipse at 50% 100%,#ffc35b25 0,transparent 36%),
+    linear-gradient(145deg,#21122f,#080610);
+}
+.big-reveal-photo:before{
+  content:"THE ORIGINAL · UNMASKED";left:27px;top:26px;
+  color:#f0d1ff;padding:8px 11px;border:1px solid #d5a2ff55;
+  border-radius:7px;background:#12091dc9;font-size:8px;
+}
+.big-reveal-photo:after{
+  content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+  background:linear-gradient(115deg,transparent 28%,#f5d9ff0b 49%,transparent 68%),
+             radial-gradient(ellipse at 50% 50%,transparent 35%,#05030b66 100%);
+}
+.big-reveal-photo img{
+  position:relative;z-index:1;width:100%;height:100%;max-height:none;
+  object-fit:contain;padding:28px 20px 18px;
+  filter:drop-shadow(0 30px 35px #000d) drop-shadow(0 0 28px #d9a9ff40);
+  animation:photoPop .9s cubic-bezier(.15,.85,.25,1) both;
+}
+.reveal-photo-badge{
+  position:absolute;right:25px;bottom:24px;z-index:3;
+  font-size:8px;font-weight:800;letter-spacing:.2em;color:#ffe2ad;
+  padding:9px 12px;border:1px solid #ffc76b88;border-radius:6px;
+  background:#120b1cd9;box-shadow:0 5px 25px #0007;
+}
+.big-reveal-copy{
+  position:relative;padding:clamp(25px,3.8vw,58px);
+  background:linear-gradient(155deg,#21132eaa,#0c0814e8);
+}
+.big-reveal-copy:before{
+  content:"";position:absolute;left:0;right:0;top:0;height:3px;
+  background:linear-gradient(90deg,#9a49e4,#e5a3ff,#ffcb70);
+}
+.reveal-head{font-size:9px;letter-spacing:.22em;color:#e1b6ff;font-weight:800}
+.reveal-person{
+  font:italic clamp(34px,4vw,58px)/.98 Georgia,serif;
+  color:#fff3e1;margin:20px 0 18px;
+  text-shadow:0 8px 30px #0007;
+}
+.role-plaque{
+  background:none;border:0;border-left:2px solid #b66be8;
+  padding:4px 0 4px 15px;margin:0 0 17px;
+}
+.role-plaque span{font-size:8px;color:#bba8c9;letter-spacing:.25em}
+.role-plaque strong{font:italic clamp(21px,2.2vw,29px)/1.2 Georgia,serif;color:#f2d6ff}
+.slogan-plaque{
+  position:relative;padding:18px 20px 19px 22px;
+  border:1px solid #ffcc7988;border-radius:14px;
+  background:
+    radial-gradient(ellipse at 100% 0,#ffc76b26,transparent 48%),
+    linear-gradient(130deg,#542c70d9,#23132fef 75%);
+  box-shadow:0 15px 35px #0005,0 0 28px #b767ed24,inset 0 1px #ffffff20;
+  margin:3px 0 20px;overflow:hidden;
+}
+.slogan-plaque:before{
+  content:"“";position:absolute;right:12px;top:-23px;
+  color:#ffd27b25;font:normal 110px Georgia,serif;line-height:1;
+}
+.slogan-kicker{display:block;color:#ffd17a;font-size:8px;letter-spacing:.22em;font-weight:900;margin-bottom:10px;position:relative}
+.reveal-slogan{
+  position:relative;color:#fff6e9;font:italic clamp(16px,1.55vw,21px)/1.42 Georgia,serif;
+  text-shadow:0 2px 18px #0006;
+}
+.reveal-department{font-size:9px;line-height:1.55;letter-spacing:.07em;color:#bdaec9}
+.reveal-divider{height:1px;background:linear-gradient(90deg,#b975eb88,#ffc96e55,transparent);margin:18px 0}
+.reveal-foot{font-size:10px;color:#c4b5d0}
+.reveal-foot strong{font:normal 27px Georgia,serif;color:#9af0ca;text-shadow:0 0 22px #6be2b544}
+.next-count{font-size:8px;color:#b4a3c2;letter-spacing:.2em;margin-top:17px}
+.finish-wrap{
+  border:1px solid #a66add88;border-radius:22px;
+  background:radial-gradient(ellipse at 50% 0,#713ca34d,transparent 62%),
+             radial-gradient(ellipse at 100% 100%,#c17a331b,transparent 38%),#120b1d;
+  box-shadow:0 35px 100px #0008;
+}
+.finish-wrap:before{border-color:#d8b5ff30;border-radius:13px}
+.finish-score{text-shadow:0 0 38px #e0a14b40}
+.board{border-top-color:#a66add55}
+.board h3{font-size:28px}
+.idol-gallery{border-top-color:#a66add55}
+.idol-gallery-head h3{letter-spacing:.1em;text-shadow:0 0 35px #b16be832}
+.idol-grid{grid-template-columns:repeat(7,minmax(0,1fr));gap:16px}
+.idol-card{
+  position:relative;aspect-ratio:3/4;min-width:0;overflow:hidden;
+  padding:0;border:1px solid #b77ce255;border-radius:13px;
+  background:linear-gradient(145deg,#2a1740,#090611);
+  box-shadow:0 12px 30px #0006;isolation:isolate;
+  transition:transform .28s ease,border-color .28s ease,box-shadow .28s ease;
+}
+.idol-card:hover{transform:translateY(-7px) scale(1.025);border-color:#ffd17a;box-shadow:0 22px 44px #0009,0 0 25px #a74fe533}
+.idol-card:after{
+  content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:linear-gradient(180deg,#09061100 35%,#09061126 52%,#090611f2 100%);
+}
+.idol-card img{
+  position:absolute;inset:0;width:100%;height:100%;aspect-ratio:auto;
+  object-fit:cover;transition:transform .5s ease;filter:saturate(1.08) contrast(1.04);
+}
+.idol-card:hover img{transform:scale(1.07)}
+.idol-card-index{
+  position:absolute;z-index:2;top:10px;left:10px;
+  padding:6px 8px;border:1px solid #d7a4ff77;border-radius:5px;
+  background:#10091bc9;color:#f0d7ff;font-size:7px;letter-spacing:.16em;
+}
+.idol-card-copy{
+  position:absolute;z-index:2;left:0;right:0;bottom:0;
+  padding:38px 12px 14px;text-align:left;
+}
+.idol-card-name{font:italic 18px/1.05 Georgia,serif;color:#fff0d8}
+.idol-card-role{font-size:9px;font-weight:800;color:#e1b5ff;margin-top:7px;letter-spacing:.06em}
+.idol-card-slogan{
+  font:italic 9px/1.35 Georgia,serif;color:#e0d5e8;
+  margin-top:6px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;
+}
+@keyframes clueFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+@keyframes photoPop{
+  0%{opacity:0;transform:translateY(28px) scale(.91);filter:drop-shadow(0 5px 12px #0008)}
+  65%{opacity:1;transform:translateY(-4px) scale(1.025)}
+  100%{opacity:1;transform:translateY(0) scale(1)}
+}
+@media(max-width:1000px){
+  .idol-grid{grid-template-columns:repeat(5,minmax(0,1fr))}
+  .big-reveal-copy{padding:25px}
+}
+@media(max-width:850px){
+  .play-card{grid-template-columns:1fr;min-height:0}
+  .photo-stage{min-height:440px;border-right:0;border-bottom:1px solid #b77ce255}
+  .photo-stage #cropBox{inset:30px}
+  .question-side{padding:32px 28px 36px}
+  .big-reveal{grid-template-columns:1fr;grid-template-rows:minmax(245px,43%) auto;overflow-y:auto}
+  .big-reveal-photo{min-height:245px;border-right:0;border-bottom:1px solid #c18cf266}
+  .big-reveal-photo img{max-height:100%;padding:25px 30px}
+  .big-reveal-copy{padding:22px 25px 27px}
+  .reveal-person{font-size:38px;margin:13px 0}
+  .slogan-plaque{margin-bottom:15px}
+}
+@media(max-width:700px){
+  .topbar{height:70px}
+  .edition{font-size:7px;letter-spacing:.12em}
+  .hero{padding-top:24px}
+  .hero h1{font-size:clamp(60px,17vw,100px)}
+  .hero-art{height:350px}
+  .art-frame{width:min(78%,360px)}
+  .start-panel{grid-template-columns:1fr}
+  .start-panel .cta{width:100%}
+  .game-wrap{padding-top:20px}
+  .game-top{align-items:center}
+  .game-title{font-size:22px}
+  .timer-ring{width:60px;height:60px}
+  .progress-track{gap:2px}
+  .photo-stage{min-height:330px}
+  .question-side{padding:26px 20px 29px}
+  .question-side h2{font-size:34px}
+  .answers{grid-template-columns:1fr;gap:9px}
+  .answer{min-height:60px}
+  .big-reveal{grid-template-rows:minmax(210px,34%) auto}
+  .big-reveal-photo{min-height:210px;padding:12px}
+  .big-reveal-photo img{padding:24px 20px 12px}
+  .reveal-photo-badge{right:13px;bottom:12px;font-size:7px}
+  .big-reveal-copy{padding:17px 19px 22px}
+  .reveal-person{font-size:34px}
+  .role-plaque strong{font-size:22px}
+  .reveal-slogan{font-size:17px}
+  .idol-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+  .idol-card{border-radius:9px}
+  .idol-card-copy{padding:28px 8px 10px}
+  .idol-card-name{font-size:14px}
+  .idol-card-role{font-size:8px}
+  .idol-card-slogan{font-size:8px;-webkit-line-clamp:2}
+}
+@media(max-width:420px){
+  .idol-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .game-status{gap:9px}
+  .progress-copy{font-size:8px}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*:before,*:after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}
 </style>
 </head>
 <body>
@@ -279,7 +602,7 @@ function renderQuestion(){
   if(idx>=TOTAL){finish();return}
   answered=false;
   const q=questions[idx];
-  $('questionTitle').innerHTML=esc(q.question||'Can you recognize the idol?').replace(/\\n/g,'<br>');
+  $('questionTitle').innerHTML='ANH LÀ…<br><em>'+esc(q.role||'AI ĐÂY?')+'</em>';
   $('progressCopy').textContent=String(idx+1).padStart(2,'0')+' / '+TOTAL;
   $('questionKicker').textContent='CASE FILE NO. '+String(idx+1).padStart(3,'0');
   $('timer').textContent='10.0';$('timerRing').style.background='conic-gradient(var(--gold) 100%,#ffffff16 0)';
@@ -314,11 +637,11 @@ function choose(j){
   logs.push({question:idx+1,choice:j,correct,seconds:+secs.toFixed(2),points:pts});
   [...$('answers').children].forEach((b,k)=>{b.disabled=true;if(k===q._correctIndex)b.classList.add('correct');else if(k===j)b.classList.add('wrong')});
   $('bigReveal').className='big-reveal';
-  $('bigReveal').innerHTML='<div class="big-reveal-photo">'+(q.original?'<img src="'+q.original+'" alt="Ảnh gốc">':'<div class="photo-empty"><b>★</b>ẢNH GỐC SẼ ĐƯỢC CẬP NHẬT</div>')+'</div><div class="big-reveal-copy"><div class="reveal-head">'+(correct?'✓ FAN RUỘT ĐÃ NHẬN RA IDOL':j===null?'HẾT GIỜ · BẬT MÍ DANH TÍNH':'BẬT MÍ DANH TÍNH · HẸN CÂU SAU')+'</div><div class="reveal-person">'+esc(q.person||'Chưa thiết lập tên nhân vật')+'</div><div class="role-plaque"><span>THE IDOL ROLE</span><strong>'+esc(q.role||'Chưa phân vai idol')+'</strong></div><div class="reveal-department">'+(q.department?'BAN / ĐƠN VỊ · '+esc(fullDepartmentName(q.department)):'')+'</div><div class="reveal-divider"></div><div class="reveal-foot"><span>'+(j===null?'Bạn đã hết 10 giây':'Bạn trả lời trong '+secs.toFixed(2)+' giây')+'</span><strong>+'+pts+' PTS</strong></div><div class="next-count">NEXT REVEAL IN 5 SECONDS</div></div>';
+  $('bigReveal').innerHTML='<div class="big-reveal-photo">'+(q.original?'<img src="'+q.original+'" alt="Ảnh gốc">':'<div class="photo-empty"><b>★</b>ẢNH GỐC SẼ ĐƯỢC CẬP NHẬT</div>')+'<div class="reveal-photo-badge">RB IDOL · NO. '+String(q.id).padStart(2,'0')+'</div></div><div class="big-reveal-copy"><div class="reveal-head">'+(correct?'✓ FAN RUỘT ĐÃ NHẬN RA IDOL':j===null?'HẾT GIỜ · BẬT MÍ DANH TÍNH':'BẬT MÍ DANH TÍNH · HẸN CÂU SAU')+'</div><div class="reveal-person">'+esc(q.person||'Chưa thiết lập tên nhân vật')+'</div><div class="role-plaque"><span>THE IDOL ROLE</span><strong>'+esc(q.role||'Chưa phân vai idol')+'</strong></div><div class="slogan-plaque"><span class="slogan-kicker">✦ SIGNATURE SLOGAN</span><div class="reveal-slogan">'+esc(q.slogan||'')+'</div></div><div class="reveal-department">'+(q.department?'BAN / ĐƠN VỊ · '+esc(fullDepartmentName(q.department)):'')+'</div><div class="reveal-divider"></div><div class="reveal-foot"><span>'+(j===null?'Bạn đã hết 10 giây':'Bạn trả lời trong '+secs.toFixed(2)+' giây')+'</span><strong>+'+pts+' PTS</strong></div><div class="next-count">NEXT REVEAL IN 5 SECONDS</div></div>';
   advance=setTimeout(()=>{idx++;renderQuestion()},REVEAL*1000);
 }
 function renderIdolGallery(){
-  $('idolGallery').innerHTML=questions.map(q=>'<article class="idol-card"><img loading="lazy" src="'+esc(q.original)+'" alt="'+esc(q.person)+'"><div class="idol-card-copy"><div class="idol-card-name">'+esc(q.person)+'</div><div class="idol-card-role">'+esc(q.role||'')+'</div></div></article>').join('');
+  $('idolGallery').innerHTML=questions.map(q=>'<article class="idol-card"><img loading="lazy" src="'+esc(q.original)+'" alt="'+esc(q.person)+'"><div class="idol-card-index">RB IDOL · '+String(q.id).padStart(2,'0')+'</div><div class="idol-card-copy"><div class="idol-card-name">'+esc(q.person)+'</div><div class="idol-card-role">'+esc(q.role||'')+'</div><div class="idol-card-slogan">'+esc(q.slogan||'')+'</div></div></article>').join('');
 }
 async function finish(){
   clearInterval(timer);if(finished)return;finished=true;
