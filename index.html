@@ -498,6 +498,57 @@ body:after{opacity:.055}
 @media(prefers-reduced-motion:reduce){
   *,*:before,*:after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
 }
+
+/* Prize announcement and per-question ticker */
+.prize-announcement{
+  display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:7px;
+  margin:16px 0 2px;padding:13px 14px;
+  border:1px solid #ffc76b9c;border-radius:11px;
+  background:linear-gradient(110deg,#7d3eaa55,#e7a3422d,#7d3eaa44);
+  box-shadow:0 8px 26px #0005,0 0 22px #f0b24b1b,inset 0 1px #ffffff18;
+  text-align:center;
+}
+.prize-announcement strong{
+  color:#ffe2a5;font-size:10px;line-height:1.45;
+  letter-spacing:.075em;font-weight:900;
+}
+.prize-announcement em{
+  display:block;flex-basis:100%;color:#fff5df;
+  font:italic 20px/1.15 Georgia,serif;letter-spacing:.025em;
+  text-shadow:0 0 18px #f7c66a4d;
+}
+.prize-announcement span{font-size:14px}
+.reward-ticker{
+  width:100%;height:30px;margin:-11px 0 17px;overflow:hidden;
+  border-top:1px solid #a96bdd55;border-bottom:1px solid #a96bdd55;
+  background:linear-gradient(90deg,#21102fdd,#3a1b4ddd,#21102fdd);
+  color:#f5d9a7;display:flex;align-items:center;position:relative;
+}
+.reward-ticker:before,.reward-ticker:after{
+  content:"";position:absolute;z-index:2;top:0;bottom:0;width:34px;pointer-events:none;
+}
+.reward-ticker:before{left:0;background:linear-gradient(90deg,#1b1027,transparent)}
+.reward-ticker:after{right:0;background:linear-gradient(270deg,#1b1027,transparent)}
+.reward-ticker-track{
+  display:flex;align-items:center;width:max-content;min-width:200%;
+  animation:rbRewardMarquee 28s linear infinite;
+}
+.reward-ticker-track span{
+  flex:0 0 auto;padding-right:65px;white-space:nowrap;
+  font-size:8px;font-weight:800;letter-spacing:.18em;
+}
+@keyframes rbRewardMarquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@media(max-width:700px){
+  .prize-announcement{padding:11px 9px;gap:5px}
+  .prize-announcement strong{font-size:9px}
+  .prize-announcement em{font-size:18px}
+  .reward-ticker{height:27px;margin:-8px 0 13px}
+  .reward-ticker-track span{font-size:7px;letter-spacing:.13em;padding-right:48px}
+}
+@media(prefers-reduced-motion:reduce){
+  .reward-ticker-track{animation:none;transform:none}
+  .reward-ticker-track span:nth-child(2){display:none}
+}
 </style>
 </head>
 <body>
@@ -518,6 +569,7 @@ body:after{opacity:.055}
       <p>Ngày thường, các anh là đồng nghiệp: chạy KPI, họp hành, deadline dí sát nút. Nhưng trong lòng chị em RB, mỗi anh đều là một <strong>idol</strong> chính hiệu: người thì “idol tận tâm”, người thì “idol nụ cười”, người thì “idol chốt deal không trượt phát nào”.</p>
       <p>Nhân ngày <strong>11/11</strong>, ngày của những người đàn ông “số 1”, các idol đã bị “cắt” ra từng mảnh: một ánh mắt, một nụ cười, một kiểu tóc huyền thoại…</p>
       <div class="preface-promises"><span>📸 Nhìn một góc ảnh, đoán đúng idol</span><span>⏱️ Càng nhanh, càng chuẩn, càng chứng tỏ bạn là fan ruột</span><span>🏆 Top 3 <strong>Fan Cứng Nhất RB</strong> sẽ được vinh danh!</div>
+      <div class="prize-announcement"><span>🏆</span><strong>TOP 3 FAN CỨNG RB SẼ ĐƯỢC THƯỞNG NÓNG</strong><em>“TIỀN TƯƠI THÓC THẬT”</em><span>💸</span></div>
       <div class="preface-cta">Nhập tên và bắt đầu thôi! 👇</div>
     </div>
     <div class="hero-meta"><span><b>28</b> MYSTERIES</span><span><b>10s</b> PER ROUND</span><span><b>01</b> CHANCE TO SHINE</span></div>
@@ -545,6 +597,9 @@ body:after{opacity:.055}
     <div class="game-status"><div class="progress-copy">YOUR JOURNEY<b id="progressCopy">01 / 28</b></div><div id="timerRing" class="timer-ring"><span id="timer">10.0</span></div></div>
   </div>
   <div class="progress-track" id="progressTrack"></div>
+  <div class="reward-ticker" role="note" aria-label="Top 3 Fan Cứng RB sẽ được thưởng nóng, tiền tươi thóc thật">
+    <div class="reward-ticker-track"><span>🏆 TOP 3 FAN CỨNG RB · THƯỞNG NÓNG “TIỀN TƯƠI THÓC THẬT” · CHƠI NHANH, ĐOÁN CHUẨN, LÊN BẢNG VÀNG ✦</span><span aria-hidden="true">🏆 TOP 3 FAN CỨNG RB · THƯỞNG NÓNG “TIỀN TƯƠI THÓC THẬT” · CHƠI NHANH, ĐOÁN CHUẨN, LÊN BẢNG VÀNG ✦</span></div>
+  </div>
   <div class="play-card">
     <div class="photo-stage"><div class="photo-label">CONFIDENTIAL · RB CASTING FILE</div><div class="photo-empty" id="cropBox"><b>?</b>THE IDENTITY IS HIDDEN</div></div>
     <div class="question-side">
