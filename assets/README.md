@@ -1,15 +1,11 @@
 # RB Men's Day photo assets — 28 people / 56 images
 
-Upload these 56 JPG files directly into this folder. Filenames are case-sensitive and must match exactly.
+All crop files are PNG. Original photos use PNG except q13, q18, and q22, which use JPG.
 
-For each q-code in the last column of the roster table, upload both files:
-- q01_crop.jpg and q01_original.jpg
-- q02_crop.jpg and q02_original.jpg
-- ...
-- q28_crop.jpg and q28_original.jpg
+Expected assets in this folder:
+- q01_crop.png through q28_crop.png
+- q01_original.png through q28_original.png, except q13_original.jpg, q18_original.jpg, and q22_original.jpg
 
-Important: q-codes map to the photos, not to the question order. For example, the first roster person (Anh Chiến) uses q07; Tiến uses q02; Anh Trí uses q01. The mapping is preloaded in `question-pack.js`.
+The q-code mapping follows the final column in the roster table, not the roster STT. The game is configured to those exact paths in question-pack.js.
 
-The game randomly creates three distractors from the other 27 people. You do not need to enter four answers manually.
-
-After uploading, commit the files. GitHub Pages will redeploy automatically.
+The ZIP currently supplied contains 55 image files and is missing q25_crop.png. Please add that one missing clue image before the public game launch. Files named q02_orginal.png, q03_orginal.png, q05_orginal.png, q15_orginal.png, and q20_orginal.png need to be renamed to q02_original.png, q03_original.png, q05_original.png, q15_original.png, and q20_original.png.
