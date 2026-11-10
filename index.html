@@ -334,7 +334,7 @@ async function finish(){
   all.push({name:player,score:points,correct,time,date:new Date().toISOString()});
   localStorage.setItem(RKEY,JSON.stringify(all));
   $('finalScore').textContent=points;
-  $('mySummary').innerHTML='<div><b>'+correct+'/29</b><span>IDENTITIES GUESSED</span></div><div><b>'+time+'s</b><span>TIME IN THE GAME</span></div><div><b>'+Math.round(correct/TOTAL*100)+'%</b><span>ACCURACY</span></div>';
+  $('mySummary').innerHTML='<div><b>'+correct+'/'+TOTAL+'</b><span>IDENTITIES GUESSED</span></div><div><b>'+time+'s</b><span>TIME IN THE GAME</span></div><div><b>'+Math.round(correct/TOTAL*100)+'%</b><span>ACCURACY</span></div>';
   $('boardRows').innerHTML=boardTable(all);
   view('finish');
   if(db){
@@ -385,7 +385,7 @@ function startLiveLeaderboard(){
 }
 function boardTable(all){
   const list=all.slice().sort((a,b)=>b.score-a.score||a.time-b.time);
-  return list.length?'<table><thead><tr><th>RANK</th><th>PLAYER</th><th>POINTS</th><th>CORRECT</th><th>TIME</th></tr></thead><tbody>'+list.map((x,i)=>'<tr><td>#'+(i+1)+'</td><td>'+esc(x.name)+'</td><td><b>'+x.score+'</b></td><td>'+x.correct+'/29</td><td>'+x.time+'s</td></tr>').join('')+'</tbody></table>':'<p class="small-muted">Chưa có lượt chơi nào.</p>';
+  return list.length?'<table><thead><tr><th>RANK</th><th>PLAYER</th><th>POINTS</th><th>CORRECT</th><th>TIME</th></tr></thead><tbody>'+list.map((x,i)=>'<tr><td>#'+(i+1)+'</td><td>'+esc(x.name)+'</td><td><b>'+x.score+'</b></td><td>'+x.correct+'/'+TOTAL</td><td>'+x.time+'s</td></tr>').join('')+'</tbody></table>':'<p class="small-muted">Chưa có lượt chơi nào.</p>';
 }
 async function showBoard(){view('board');await refreshFullBoard()}
 function playAgain(){$('playerName').value=player;joinGame()}
