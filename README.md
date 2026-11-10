@@ -15,11 +15,11 @@ A cinematic, self-paced guessing game for 28 RB colleagues. There is no MC and n
 The order in `question-pack.js` follows the latest table you supplied. Each entry stores:
 - `person`: correct identity for that question
 - `department`: unit / business group
-- `question`: editable question heading for that particular character
-- `role`: Idol name and tagline, displayed on the reveal screen
+- `question`: the full hint text from column 3, shown as the question prompt
+- `role`: Idol title, combined with the person's name in each answer choice and shown on the reveal screen
 - `crop` and `original`: photo paths assigned using the q-code in the last column of your table
 
-The game automatically builds four options per question: the correct person's name plus three randomly selected distractors from the other 27 people. The choices are shuffled each time a player starts a question.
+The game automatically builds four options per question in the format `Person name - Idol title`: the correct person plus three randomly selected distractors from the other 27 people. The choices are shuffled each time a player starts a question.
 
 ## The 56-photo set
 Upload 56 JPG files directly into the `assets/` folder:
